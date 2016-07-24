@@ -1,0 +1,12 @@
+language: java
+jdk:
+- oraclejdk8
+deploy:
+  provider: openshift
+  user: juniorb08@gmail.com
+  password:
+    secure: csh+M3HxqOt1zqHk0kU7hkZWLz4TLYWy2eORAVwD11PJARvO3NAKD27TqtkdB1VBCiJPeASWaF29dk7ium0ZEcFK1nEUx5Z3OM7iu1gF73nVteiITZwe+Oat/cWoWFuWrxkmW27RUET9nqVRDkNIvt+L9pGDqqtgY047ibdsrmWM+7SWmo8bSDm5wgPVGRsYYx+0RVo+F9dSKHl9lSgsEvDstiftw+9YsA6NHSJyuitcxzHP4jiNUdvQxMwIcmFsDKRh7pcSGKL5BVEVkvMNAYRP6hnoYwV0f6vkqps6NACZsZMbNz5yPYSdzWzRo6XT6FJKOANjt6Gb4/MSXzM8lZMNckQXmGqIW6zeltpeO8+Uf0pLHr1RvVSFS5+imXjuibO3NOm+uosNAeP7AIy+dm0PnzGdmBuhMM13ThHQfqXDWUjBsPM+SmRn7dIcyGHs3sO83oO1D26w0ETirs4QXsP0NXb2mDaVJlh1s0LztjSyjSJokIiwSwhkM0QWUiCE5wZovTqKQ21oKAtJeZ3A5gOHHnKXDCYZwvurzTb1RSLHAHaheszbkYLZH2TVbmJIgLZrNwDAbq8QDe0fuiP8snaHDViLKpS5LS3++mrODZ0Gg1A9T8G6t3VxJ6dJywdFbVs/7+SBbdvcyGio5V1HIOTnZb8JIMcSZoCIyF1naXI=
+  app: daca
+  domain: gervasiocaj
+  on:
+    repo: equipe-daca/projeto
