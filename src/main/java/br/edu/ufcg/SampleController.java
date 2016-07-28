@@ -8,6 +8,6 @@ public class SampleController {
 
     @RequestMapping("/")
     public String index() {
-        return "Hello World! SpringBoot on Heroku";
+        return "Hello World! SpringBxxxoot on Heroku";
     }
 }
