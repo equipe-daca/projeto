@@ -2,14 +2,18 @@ package br.edu.ufcg.models;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class Test implements Serializable {
 
     String name, tip;
-    HashMap<String, String> inputs;
+    Map<String, String> inputs;
 
-    public Test(String name, String tip, HashMap<String, String> inputs) {
+    public Test() {
+    }
+
+    public Test(String name, String tip, Map<String, String> inputs) {
         this.name = name;
         this.tip = tip;
         this.inputs = inputs;
@@ -31,11 +35,11 @@ public class Test implements Serializable {
         this.tip = tip;
     }
 
-    public HashMap<String, String> getInputs() {
+    public Map<String, String> getInputs() {
         return inputs;
     }
 
-    public void setInputs(HashMap<String, String> inputs) {
+    public void setInputs(Map<String, String> inputs) {
         this.inputs = inputs;
     }
 }

@@ -20,10 +20,10 @@ public class ProblemController {
         return new ResponseEntity<>(problems, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/{code}", method=RequestMethod.GET)
+    @RequestMapping(value="/{problemCode}", method=RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Problem> getProblem(@PathVariable Long code){
-        Problem  problem = new Problem(code, "Nome", "Descrição", "Dica", new ArrayList<Test>());
+    public ResponseEntity<Problem> getProblem(@PathVariable Long problemCode){
+        Problem  problem = new Problem(problemCode, "Nome", "Descrição", "Dica", new ArrayList<Test>());
         return new ResponseEntity<>(problem, HttpStatus.OK);
     }
 
@@ -33,15 +33,15 @@ public class ProblemController {
         return new ResponseEntity<>(problem, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/{code}", method=RequestMethod.PUT)
+    @RequestMapping(value="/{problemCode}", method=RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<Problem> updateProblem(@PathVariable Long code, @RequestBody Problem problem){
+    public ResponseEntity<Problem> updateProblem(@PathVariable Long problemCode, @RequestBody Problem problem){
         return new ResponseEntity<>(problem, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/{code}", method=RequestMethod.DELETE)
+    @RequestMapping(value="/{problemCode}", method=RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<Problem> deleteProblem(@PathVariable Long code, @RequestBody Problem problem){
+    public ResponseEntity<Problem> deleteProblem(@PathVariable Long problemCode, @RequestBody Problem problem){
         return new ResponseEntity<>(problem, HttpStatus.OK);
     }
 }
