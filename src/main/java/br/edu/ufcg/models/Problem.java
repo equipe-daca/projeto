@@ -9,6 +9,8 @@ public class Problem implements Serializable {
     String name, desc, tip;
     List<Test> tests;
 
+    public Problem() {
+    }
 
     public Problem(Long code, String name, String desc, String tip, List<Test> tests) {
         this.code = code;
