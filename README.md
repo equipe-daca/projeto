@@ -14,3 +14,9 @@ Clone do _backend_ do sistema [Dirlididi](http://dirlididi.com/client/index.html
 
 - `mvn spring-boot:run`
 - `mvn test`
+
+
+## Links
+
+- [Aplicação em execução no Heroku](http://projeto-daca.herokuapp.com/)
+- [Ferramenta de _Continuous Integration_](https://travis-ci.org/equipe-daca/projeto)
