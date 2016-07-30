@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value="/user")
+@RequestMapping(value="/user", produces="application/json")
 public class UserController {
 
     @RequestMapping(value="/{userCode}", method=RequestMethod.GET)

@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/solution")
+@RequestMapping(value = "/solution", produces="application/json")
 public class SolutionController {
 
     @RequestMapping(method= RequestMethod.POST)
