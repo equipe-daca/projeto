@@ -22,3 +22,4 @@ Clone do _backend_ do sistema [Dirlididi](http://dirlididi.com/client/index.html
 
 - [Aplicação em execução no Heroku](http://projeto-daca.herokuapp.com/)
 - [Ferramenta de _Continuous Integration_](https://travis-ci.org/equipe-daca/projeto)
+- [Documentação da API](http://projeto-daca.herokuapp.com/swagger-ui.html)
