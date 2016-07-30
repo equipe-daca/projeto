@@ -5,22 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-
 @RestController
 @RequestMapping(value="/statistic")
 public class StatisticController {
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<Statistic>> getStatistic(){
-        List<Statistic> statistics = Collections.emptyList();
-        return new ResponseEntity<>(statistics, HttpStatus.OK);
-    }
-
-    @RequestMapping(method= RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity<Statistic> createStatistic(@RequestBody Statistic statistic){
+    public ResponseEntity<Statistic> getStatistic(){
+        Statistic statistic = new Statistic(99, 25);
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
 
