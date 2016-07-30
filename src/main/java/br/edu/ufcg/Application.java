@@ -34,8 +34,8 @@ public class Application {
                 .description("Projeto da disciplina Desenvolvimento de Aplicações Corporativas Avançadas," +
                         "período 2016.1, Universidade Federal de Campina Grande.\nClone do backend do sistema" +
                         "Dirlididi.")
-                .contact("Diego Augusto")
-                .contact("Gervásio Júnior")
+                .contact("Diego Augusto <diego.moura.oliveira@ccc.ufcg.edu.br>, " +
+                        "Gervásio Júnior <gervasio.junior@ccc.ufcg.edu.br>")
                 .license("MIT")
                 .licenseUrl("https://github.com/equipe-daca/projeto/blob/master/LICENSE")
                 .version("1.0")
