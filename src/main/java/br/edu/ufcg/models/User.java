@@ -6,12 +6,12 @@ import br.edu.ufcg.UserClass;
 public class User {
 
     String email, password;
-    int userClass;
+    UserClass userClass;
 
     public User() {
     }
 
-    public User(String email, String password, int userClass) {
+    public User(String email, String password, UserClass userClass) {
         this.email = email;
         this.password = password;
         this.userClass = userClass;
@@ -33,11 +33,11 @@ public class User {
         this.password = password;
     }
 
-    public int getUserClass() {
+    public UserClass getUserClass() {
         return userClass;
     }
 
-    public void setUserClass(int userClass) {
+    public void setUserClass(UserClass userClass) {
         this.userClass = userClass;
     }
 }
