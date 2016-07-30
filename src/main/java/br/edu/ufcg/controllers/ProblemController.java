@@ -15,7 +15,11 @@ import java.util.List;
 public class ProblemController {
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity< List<Problem>> getProblems(){
+    public ResponseEntity< List<Problem>> getProblems(
+            @RequestParam(value = "page", required = false) boolean page,
+            @RequestParam(value = "sort", required = false) boolean sort,
+            @RequestParam(value = "user", required = false) String user){
+
         List<Problem> problems = Collections.emptyList();
         return new ResponseEntity<>(problems, HttpStatus.OK);
     }
@@ -23,6 +27,7 @@ public class ProblemController {
     @RequestMapping(value="/{problemCode}", method=RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Problem> getProblem(@PathVariable Long problemCode){
+
         Problem  problem = new Problem(problemCode, "Nome", "Descrição", "Dica", new ArrayList<Test>());
         return new ResponseEntity<>(problem, HttpStatus.OK);
     }

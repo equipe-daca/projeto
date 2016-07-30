@@ -1,19 +1,18 @@
 package br.edu.ufcg.models;
 
-
 import java.util.Map;
 
 public class Solution {
 
-    String body, input, output;
+    String body;
+    Map<String, String> inputs;
 
     public Solution() {
     }
 
-    public Solution(String body, String input, String output) {
+    public Solution(String body, Map<String, String> inputs) {
         this.body = body;
-        this.input = input;
-        this.output = output;
+        this.inputs = inputs;
     }
 
     public String getBody() {
@@ -24,19 +23,11 @@ public class Solution {
         this.body = body;
     }
 
-    public String getInput() {
-        return input;
+    public Map<String, String> getInputs() {
+        return inputs;
     }
 
-    public void setInput(String input) {
-        this.input = input;
-    }
-
-    public String getOutput() {
-        return output;
-    }
-
-    public void setOutput(String output) {
-        this.output = output;
+    public void setInputs(Map<String, String> inputs) {
+        this.inputs = inputs;
     }
 }

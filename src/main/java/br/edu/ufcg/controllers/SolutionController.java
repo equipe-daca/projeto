@@ -12,7 +12,7 @@ public class SolutionController {
 
     @RequestMapping(method= RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Solution> createProblem(@RequestBody Solution solution){
+    public ResponseEntity<Solution> createStatistic(@RequestBody Solution solution){
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
 }
