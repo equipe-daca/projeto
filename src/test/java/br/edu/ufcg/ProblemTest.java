@@ -26,7 +26,9 @@ public class ProblemTest {
     @Test
     public void getProblems() throws Exception {
         given()
-                .accept("application/json")
+                .param("sort", false)
+                .param("page", false)
+                .param("user", "123412341234")
         .when()
                 .port(this.port)
                 .get("/problem")
