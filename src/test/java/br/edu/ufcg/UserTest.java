@@ -3,6 +3,7 @@ package br.edu.ufcg;
 import br.edu.ufcg.models.User;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,36 +21,36 @@ public class UserTest {
 
     @Value("${local.server.port}")
     private int port;
+    private Gson gson;
+
+    @Before
+    public void setUp() throws Exception {
+        gson = new Gson();
+    }
 
     @Test
     public void getUser() throws Exception {
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", 1)
-                .when()
+        .when()
                 .port(this.port)
                 .get("/user/{code}")
-                .then().assertThat()
+        .then().assertThat()
                 .statusCode(is(200));
     }
 
     @Test
     public void createUser() throws Exception {
-
-        Gson gson = new Gson();
-
         User user = new User((long) 1, "user@email", "password", UserClass.NORMAL, 0);
-
-        String json = gson.toJson(user);
 
         given()
                 .contentType(ContentType.JSON)
-                .body(json)
-                .when()
+                .body(gson.toJson(user))
+        .when()
                 .port(this.port)
                 .post("/user")
-                .then()
-                .assertThat()
+        .then().assertThat()
                 .statusCode(is(200));
     }
 }
