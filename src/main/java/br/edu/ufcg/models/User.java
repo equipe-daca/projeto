@@ -1,20 +1,31 @@
 package br.edu.ufcg.models;
 
-
 import br.edu.ufcg.UserClass;
 
 public class User {
 
+    long id;
     String email, password;
     UserClass userClass;
+    int solvedProblems;
 
     public User() {
     }
 
-    public User(String email, String password, UserClass userClass) {
+    public User(long id, String email, String password, UserClass userClass, int solvedProblems) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.userClass = userClass;
+        this.solvedProblems = solvedProblems;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -39,5 +50,13 @@ public class User {
 
     public void setUserClass(UserClass userClass) {
         this.userClass = userClass;
+    }
+
+    public int getSolvedProblems() {
+        return solvedProblems;
+    }
+
+    public void setSolvedProblems(int solvedProblems) {
+        this.solvedProblems = solvedProblems;
     }
 }
