@@ -2,7 +2,9 @@ Projeto - DACA [![Build Status](https://travis-ci.org/equipe-daca/projeto.svg?br
 ==============
 
 ## O que é
-Projeto da disciplina Desenvolvimento de Aplicações Corporativas Avançadas, período 2016.1, Universidade Federal de Campina Grande.
+Projeto da disciplina Desenvolvimento de Aplicações Corporativas Avançadas, período 2016.1. 
+
+Universidade Federal de Campina Grande.
 
 Clone do _backend_ do sistema [Dirlididi](http://dirlididi.com/client/index.html).
 
