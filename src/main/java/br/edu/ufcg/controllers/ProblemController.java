@@ -22,7 +22,11 @@ public class ProblemController {
 
     @RequestMapping(value="/{problemCode}", method=RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Problem> getProblem(@PathVariable Long problemCode){
+    public ResponseEntity<Problem> getProblem(
+            @PathVariable Long problemCode,
+            @RequestParam String page,
+            @RequestParam String sort){
+
         Problem  problem = new Problem(problemCode, "Nome", "Descrição", "Dica", new ArrayList<Test>());
         return new ResponseEntity<>(problem, HttpStatus.OK);
     }
