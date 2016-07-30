@@ -2,7 +2,7 @@ package br.edu.ufcg.models;
 
 public class Statistic {
 
-    int problems, submitters;
+    private int problems, submitters;
 
     public Statistic() {
     }

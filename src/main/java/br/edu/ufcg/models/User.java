@@ -4,10 +4,10 @@ import br.edu.ufcg.UserClass;
 
 public class User {
 
-    long id;
-    String email, password;
-    UserClass userClass;
-    int solvedProblems;
+    private long id;
+    private String email, password;
+    private UserClass userClass;
+    private transient int solvedProblems;
 
     public User() {
     }

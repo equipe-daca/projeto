@@ -11,8 +11,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
 
 @SpringApplicationConfiguration(classes=Application.class)
 @WebIntegrationTest("server.port=0")
@@ -42,7 +42,8 @@ public class UserTest {
 
     @Test
     public void createUser() throws Exception {
-        User user = new User((long) 1, "user@email", "password", UserClass.NORMAL, 0);
+        long id = 3232;
+        User user = new User(id, "user@email", "password", UserClass.NORMAL, 0);
 
         given()
                 .contentType(ContentType.JSON)
@@ -51,6 +52,8 @@ public class UserTest {
                 .port(this.port)
                 .post("/user")
         .then().assertThat()
-                .statusCode(is(200));
+                .statusCode(is(200))
+                .body("id", equalTo((int) id))
+                .body(not(hasProperty("solvedProblems")));
     }
 }

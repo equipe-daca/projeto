@@ -4,8 +4,8 @@ import java.util.Map;
 
 public class Solution {
 
-    String body;
-    Map<String, String> inputs;
+    private String body;
+    private Map<String, String> inputs;
 
     public Solution() {
     }

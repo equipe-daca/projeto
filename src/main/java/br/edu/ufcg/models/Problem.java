@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Problem implements Serializable {
 
-    Long code;
-    String name, desc, tip;
-    List<Test> tests;
+    private long code;
+    private String name, desc, tip;
+    private List<Test> tests;
 
     public Problem() {
     }
 
-    public Problem(Long code, String name, String desc, String tip, List<Test> tests) {
+    public Problem(long code, String name, String desc, String tip, List<Test> tests) {
         this.code = code;
         this.name = name;
         this.desc = desc;
@@ -20,11 +20,11 @@ public class Problem implements Serializable {
         this.tests = tests;
     }
 
-    public Long getCode() {
+    public long getCode() {
         return code;
     }
 
-    public void setCode(Long code) {
+    public void setCode(long code) {
         this.code = code;
     }
 
