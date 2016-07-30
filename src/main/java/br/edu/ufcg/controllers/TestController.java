@@ -15,14 +15,14 @@ import java.util.Map;
 public class TestController {
 
     @RequestMapping(value="", method=RequestMethod.GET)
-    public ResponseEntity< List<Test>> getProblems(){
+    public ResponseEntity< List<Test>> getTests(){
         List<Test> tests = Collections.emptyList();
         return new ResponseEntity<>(tests, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{testCode}", method=RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Test> getProblem(@PathVariable Long problemCode, @PathVariable Long testCode){
+    public ResponseEntity<Test> getTest(@PathVariable Long problemCode, @PathVariable Long testCode){
         Map<String, String> valores = new HashMap<>();
         valores.put("entrada1", "saida1");
         valores.put("entrada2", "saida2");
@@ -32,19 +32,19 @@ public class TestController {
 
     @RequestMapping(method=RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Test> createProblem(@RequestBody Test test){
+    public ResponseEntity<Test> createTest(@RequestBody Test test){
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{testCode}", method=RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<Test> updateProblem(@PathVariable Long problemCode, @PathVariable Long testCode, @RequestBody Test test){
+    public ResponseEntity<Test> updateTest(@PathVariable Long problemCode, @PathVariable Long testCode, @RequestBody Test test){
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{testCode}", method=RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<Test> deleteProblem(@PathVariable Long problemCode, @PathVariable Long testCode, @RequestBody Test test){
+    public ResponseEntity<Test> deleteTest(@PathVariable Long problemCode, @PathVariable Long testCode, @RequestBody Test test){
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 }
