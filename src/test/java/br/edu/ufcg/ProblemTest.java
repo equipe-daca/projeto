@@ -1,11 +1,16 @@
 package br.edu.ufcg;
 
+import br.edu.ufcg.models.Problem;
+import com.google.gson.Gson;
+import io.restassured.http.ContentType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.ArrayList;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.empty;
@@ -41,25 +46,63 @@ public class ProblemTest {
                 .statusCode(is(200));
     }
 
-   /* @Test
-    public void testCreateProblem() throws Exception {
+    @Test
+    public void createProblem() throws Exception {
 
-        String s = "{ + " +
-                "\"code\": 1," +
-                "\"name\": \"name\"," +
-                "\"desc\": \"desc\"," +
-                "\"tip\": \"tip\"," +
-                "\"tests\": []" +
-                "}";
+        Gson gson = new Gson();
+
+        Problem problem = new Problem((long) 1, "Name", "Desc", "Tip", new ArrayList<>());
+
+        String json = gson.toJson(problem);
 
         given()
-                .accept("application/json")
-                .body(s)
+                .contentType(ContentType.JSON)
+                .body(json)
                 .when()
                     .port(this.port)
                     .post("/problem")
                 .then()
                     .assertThat()
                     .statusCode(is(200));
-    }*/
+    }
+
+    @Test
+    public void updateProblem() throws Exception {
+
+        Gson gson = new Gson();
+
+        Problem problem = new Problem((long) 1, "Name", "Desc", "Tip", new ArrayList<>());
+
+        String json = gson.toJson(problem);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(json)
+                .when()
+                .port(this.port)
+                .put("/problem/1")
+                .then()
+                .assertThat()
+                .statusCode(is(200));
+    }
+
+    @Test
+    public void deleteProblem() throws Exception {
+
+        Gson gson = new Gson();
+
+        Problem problem = new Problem((long) 1, "Name", "Desc", "Tip", new ArrayList<>());
+
+        String json = gson.toJson(problem);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(json)
+                .when()
+                .port(this.port)
+                .delete("/problem/1")
+                .then()
+                .assertThat()
+                .statusCode(is(200));
+    }
 }
