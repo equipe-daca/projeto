@@ -3,6 +3,7 @@ package br.edu.ufcg;
 import br.edu.ufcg.models.Solution;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,23 +23,24 @@ public class SolutionTest {
 
     @Value("${local.server.port}")
     private int port;
+    private Gson gson;
+
+    @Before
+    public void setUp() throws Exception {
+        gson = new Gson();
+    }
 
     @Test
     public void createSolution() throws Exception {
-        Gson gson = new Gson();
-
         Solution solution = new Solution("Body", new HashMap<>());
-
-        String json = gson.toJson(solution);
 
         given()
                 .contentType(ContentType.JSON)
-                .body(json)
-                .when()
+                .body(gson.toJson(solution))
+        .when()
                 .port(this.port)
                 .post("/solution")
-                .then()
-                .assertThat()
+        .then().assertThat()
                 .statusCode(is(200));
     }
 }

@@ -1,14 +1,12 @@
 package br.edu.ufcg.models;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
-
 
 public class Test implements Serializable {
 
-    String name, tip;
-    Map<String, String> inputs;
+    private String name, tip;
+    private Map<String, String> inputs;
 
     public Test() {
     }

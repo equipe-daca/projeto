@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value="/statistic")
+@RequestMapping(value="/statistic", produces="application/json")
 public class StatisticController {
 
     @RequestMapping(method=RequestMethod.GET)

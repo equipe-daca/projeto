@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="/problem")
+@RequestMapping(value="/problem", produces="application/json")
 public class ProblemController {
 
     @RequestMapping(method=RequestMethod.GET)

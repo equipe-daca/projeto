@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value="/")
 public class IndexController {
 
-    @RequestMapping(value="/", method= RequestMethod.GET)
+    @RequestMapping(value="/", method=RequestMethod.GET, produces="text/plain")
     public String getIndex(){
         return "Servidor On";
     }

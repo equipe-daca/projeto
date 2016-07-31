@@ -3,6 +3,7 @@ package br.edu.ufcg;
 import br.edu.ufcg.models.Problem;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,12 @@ import static org.hamcrest.Matchers.is;
 public class ProblemTest {
     @Value("${local.server.port}")
     private int port;
+    private Gson gson;
+
+    @Before
+    public void setUp() throws Exception {
+        gson = new Gson();
+    }
 
     @Test
     public void getProblems() throws Exception {
@@ -41,70 +48,52 @@ public class ProblemTest {
     public void getProblem() throws Exception {
         given()
                 .accept("application/json")
-                .when()
+        .when()
                 .port(this.port)
                 .get("/problem/1")
-                .then().assertThat()
+        .then().assertThat()
                 .statusCode(is(200));
     }
 
     @Test
     public void createProblem() throws Exception {
-
-        Gson gson = new Gson();
-
         Problem problem = new Problem((long) 1, "Name", "Desc", "Tip", new ArrayList<>());
-
-        String json = gson.toJson(problem);
 
         given()
                 .contentType(ContentType.JSON)
-                .body(json)
-                .when()
-                    .port(this.port)
-                    .post("/problem")
-                .then()
-                    .assertThat()
-                    .statusCode(is(200));
+                .body(gson.toJson(problem))
+        .when()
+                .port(this.port)
+                .post("/problem")
+        .then().assertThat()
+                .statusCode(is(200));
     }
 
     @Test
     public void updateProblem() throws Exception {
-
-        Gson gson = new Gson();
-
         Problem problem = new Problem((long) 1, "Name", "Desc", "Tip", new ArrayList<>());
-
-        String json = gson.toJson(problem);
 
         given()
                 .contentType(ContentType.JSON)
-                .body(json)
-                .when()
+                .body(gson.toJson(problem))
+        .when()
                 .port(this.port)
                 .put("/problem/1")
-                .then()
-                .assertThat()
+        .then().assertThat()
                 .statusCode(is(200));
     }
 
     @Test
     public void deleteProblem() throws Exception {
-
-        Gson gson = new Gson();
-
         Problem problem = new Problem((long) 1, "Name", "Desc", "Tip", new ArrayList<>());
-
-        String json = gson.toJson(problem);
 
         given()
                 .contentType(ContentType.JSON)
-                .body(json)
-                .when()
+                .body(gson.toJson(problem))
+        .when()
                 .port(this.port)
                 .delete("/problem/1")
-                .then()
-                .assertThat()
+        .then().assertThat()
                 .statusCode(is(200));
     }
 }
