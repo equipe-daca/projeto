@@ -2,6 +2,8 @@ package br.edu.ufcg.controllers;
 
 import br.edu.ufcg.models.Problem;
 import br.edu.ufcg.models.Test;
+import br.edu.ufcg.repositories.ProblemRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +16,17 @@ import java.util.List;
 @RequestMapping(value="/problem", produces="application/json")
 public class ProblemController {
 
+    @Autowired
+    ProblemRepository problemRepo;
+
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity< List<Problem>> getProblems(
             @RequestParam(value = "page", required = false) boolean page,
             @RequestParam(value = "sort", required = false) boolean sort,
             @RequestParam(value = "user", required = false) String user){
 
-        List<Problem> problems = Collections.emptyList();
+        problemRepo.save(new Problem("a", "b", null, new ArrayList<Test>()));
+        List<Problem> problems = problemRepo.findAll();
         return new ResponseEntity<>(problems, HttpStatus.OK);
     }
 
@@ -28,7 +34,7 @@ public class ProblemController {
     @ResponseBody
     public ResponseEntity<Problem> getProblem(@PathVariable Long problemCode){
 
-        Problem  problem = new Problem(problemCode, "Nome", "Descrição", "Dica", new ArrayList<Test>());
+        Problem  problem = new Problem("Nome", "Descrição", "Dica", new ArrayList<Test>());
         return new ResponseEntity<>(problem, HttpStatus.OK);
     }
 

@@ -1,31 +1,40 @@
 package br.edu.ufcg.models;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@Entity
 public class Problem implements Serializable {
 
-    private long code;
-    private String name, desc, tip;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String desc;
+    @Column
+    private String tip;
+    @OneToMany(mappedBy = "problem")
     private List<Test> tests;
 
     public Problem() {
     }
 
-    public Problem(long code, String name, String desc, String tip, List<Test> tests) {
-        this.code = code;
+    public Problem(String name, String desc, String tip, List<Test> tests) {
         this.name = name;
         this.desc = desc;
         this.tip = tip;
         this.tests = tests;
     }
 
-    public long getCode() {
-        return code;
+    public Long getId() {
+        return id;
     }
 
-    public void setCode(long code) {
-        this.code = code;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

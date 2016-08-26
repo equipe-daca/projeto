@@ -1,5 +1,6 @@
 package br.edu.ufcg.controllers;
 
+import br.edu.ufcg.models.Problem;
 import br.edu.ufcg.models.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class TestController {
         Map<String, String> valores = new HashMap<>();
         valores.put("entrada1", "saida1");
         valores.put("entrada2", "saida2");
-        Test test = new Test("Nome", "Dica", valores);
+        Test test = new Test("Nome", "Dica", valores, new Problem());
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 

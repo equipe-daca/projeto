@@ -57,7 +57,7 @@ public class ProblemTest {
 
     @Test
     public void createProblem() throws Exception {
-        Problem problem = new Problem((long) 1, "Name", "Desc", "Tip", new ArrayList<>());
+        Problem problem = new Problem("Name", "Desc", "Tip", new ArrayList<>());
 
         given()
                 .contentType(ContentType.JSON)
@@ -71,7 +71,7 @@ public class ProblemTest {
 
     @Test
     public void updateProblem() throws Exception {
-        Problem problem = new Problem((long) 1, "Name", "Desc", "Tip", new ArrayList<>());
+        Problem problem = new Problem("Name", "Desc", "Tip", new ArrayList<>());
 
         given()
                 .contentType(ContentType.JSON)
@@ -85,7 +85,7 @@ public class ProblemTest {
 
     @Test
     public void deleteProblem() throws Exception {
-        Problem problem = new Problem((long) 1, "Name", "Desc", "Tip", new ArrayList<>());
+        Problem problem = new Problem("Name", "Desc", "Tip", new ArrayList<>());
 
         given()
                 .contentType(ContentType.JSON)

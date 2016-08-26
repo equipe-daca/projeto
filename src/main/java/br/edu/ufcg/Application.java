@@ -1,7 +1,9 @@
 package br.edu.ufcg;
 
+import org.h2.server.web.WebServlet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
@@ -20,7 +22,14 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Bean
+    @Bean
+    ServletRegistrationBean h2servletRegistration(){
+        ServletRegistrationBean registrationBean = new ServletRegistrationBean( new WebServlet());
+        registrationBean.addUrlMappings("/console/*");
+        return registrationBean;
+    }
+
+    @Bean
     public Docket newsApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
