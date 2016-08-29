@@ -25,8 +25,8 @@ public class ProblemController {
             @RequestParam(value = "sort", required = false) boolean sort,
             @RequestParam(value = "user", required = false) String user){
 
-        problemRepo.save(new Problem("a", "b", null, new ArrayList<Test>()));
         List<Problem> problems = problemRepo.findAll();
+
         return new ResponseEntity<>(problems, HttpStatus.OK);
     }
 
