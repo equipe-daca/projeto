@@ -3,6 +3,7 @@ package br.edu.ufcg.controllers;
 import br.edu.ufcg.models.Problem;
 import br.edu.ufcg.models.Test;
 import br.edu.ufcg.repositories.ProblemRepository;
+import br.edu.ufcg.services.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import java.util.List;
 public class ProblemController {
 
     @Autowired
-    ProblemRepository problemRepo;
+    ProblemService service;
 
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity< List<Problem>> getProblems(
@@ -26,7 +27,7 @@ public class ProblemController {
             @RequestParam(value = "sort", required = false) boolean sort,
             @RequestParam(value = "user", required = false) String user){
 
-        List<Problem> problems = problemRepo.findAll();
+        List<Problem> problems = service.getProblems();
 
         return new ResponseEntity<>(problems, HttpStatus.OK);
     }

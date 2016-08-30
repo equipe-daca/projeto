@@ -1,5 +1,7 @@
 package br.edu.ufcg.models;
 
+import com.google.gson.Gson;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -16,7 +18,8 @@ public class Problem implements Serializable {
     private String desc;
     @Column
     private String tip;
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    // TODO: 30/08/16 Diferença entre o EAGER e LAZY?
+    @OneToMany(fetch=FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     @OrderColumn
     private List<Test> tests;
 
@@ -68,5 +71,11 @@ public class Problem implements Serializable {
 
     public void setTests(List<Test> tests) {
         this.tests = tests;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this).toString();
     }
 }

@@ -26,9 +26,9 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        List<Test> testes = new ArrayList<>();
-        testes.add(new Test("nome", "dica", "in", "out", true));
-        Problem p1 = new Problem("nome", "descricao", "dica", testes);
-        problemRepo.save(p1);
+//        List<Test> testes = new ArrayList<>();
+//        testes.add(new Test("nome", "dica", "in", "out", true));
+//        Problem p1 = new Problem("nome", "descricao", "dica", testes);
+//        problemRepo.save(p1);
     }
 }
