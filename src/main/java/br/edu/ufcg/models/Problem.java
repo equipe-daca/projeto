@@ -16,7 +16,8 @@ public class Problem implements Serializable {
     private String desc;
     @Column
     private String tip;
-    @OneToMany(mappedBy = "problem")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OrderColumn
     private List<Test> tests;
 
     public Problem() {

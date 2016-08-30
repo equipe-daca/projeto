@@ -4,6 +4,7 @@ import br.edu.ufcg.models.Problem;
 import br.edu.ufcg.models.Test;
 import br.edu.ufcg.repositories.ProblemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

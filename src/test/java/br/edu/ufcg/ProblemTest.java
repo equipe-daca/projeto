@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 @SpringApplicationConfiguration(classes=Application.class)
 @WebIntegrationTest("server.port=0")
@@ -41,7 +42,7 @@ public class ProblemTest {
                 .get("/problem")
         .then().assertThat()
                 .statusCode(is(200))
-                .body("", empty());
+                .body("", not(empty()));
     }
 
     @Test
