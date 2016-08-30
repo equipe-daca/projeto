@@ -2,9 +2,12 @@ package br.edu.ufcg;
 
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -16,6 +19,9 @@ import static springfox.documentation.builders.RequestHandlerSelectors.basePacka
 
 @EnableSwagger2
 @SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan("test.builder")
+
 public class Application {
 
 	public static void main(String[] args) {

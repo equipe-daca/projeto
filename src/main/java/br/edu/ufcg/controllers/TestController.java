@@ -23,11 +23,8 @@ public class TestController {
 
     @RequestMapping(value="/{testCode}", method=RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Test> getTest(@PathVariable Long problemCode, @PathVariable Long testCode){
-        Map<String, String> valores = new HashMap<>();
-        valores.put("entrada1", "saida1");
-        valores.put("entrada2", "saida2");
-        Test test = new Test("Nome", "Dica", valores, new Problem());
+    public ResponseEntity<Test> getTest(@PathVariable Long problemCode, @PathVariable Long testCode) {
+        Test test = new Test("Nome", "Dica", "entrada1", "saida1", true);
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 

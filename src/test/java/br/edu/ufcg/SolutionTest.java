@@ -32,7 +32,7 @@ public class SolutionTest {
 
     @Test
     public void createSolution() throws Exception {
-        Solution solution = new Solution("Body", new HashMap<>());
+        Solution solution = new Solution("Corpo");
 
         given()
                 .contentType(ContentType.JSON)

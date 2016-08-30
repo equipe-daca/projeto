@@ -1,6 +1,5 @@
 package br.edu.ufcg.controllers;
 
-import br.edu.ufcg.UserClass;
 import br.edu.ufcg.models.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,7 @@ public class UserController {
     @RequestMapping(value="/{userCode}", method=RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<User> getUser(@PathVariable long userCode){
-        User user = new User(userCode, "user@email.com", "123456", UserClass.NORMAL, 0);
+        User user = new User("user@email.com", "123456", User.Class.NORMAL);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

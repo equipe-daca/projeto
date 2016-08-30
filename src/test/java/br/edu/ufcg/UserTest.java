@@ -1,11 +1,13 @@
 package br.edu.ufcg;
 
 import br.edu.ufcg.models.User;
+import br.edu.ufcg.repositories.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -22,6 +24,8 @@ public class UserTest {
     @Value("${local.server.port}")
     private int port;
     private Gson gson;
+
+    UserRepository userRepo;
 
     @Before
     public void setUp() throws Exception {
@@ -42,8 +46,7 @@ public class UserTest {
 
     @Test
     public void createUser() throws Exception {
-        long id = 3232;
-        User user = new User(id, "user@email", "password", UserClass.NORMAL, 0);
+        User user = new User("user@email", "password", User.Class.NORMAL);
 
         given()
                 .contentType(ContentType.JSON)
@@ -53,7 +56,21 @@ public class UserTest {
                 .post("/user")
         .then().assertThat()
                 .statusCode(is(200))
-                .body("id", equalTo((int) id))
                 .body(not(hasProperty("solvedProblems")));
     }
+
+//    @Test
+//    public void testRepo() {
+//        User temp = new User("email@email", "password123", User.Class.NORMAL);
+//        userRepo.save(temp);
+//        User first = userRepo.findAll().iterator().next();
+//
+//        when()
+//                .get("/user/" + first.getId())
+//        .then().
+//                assertThat()
+//                .statusCode(is(200))
+//                .body(equalTo(temp));
+//
+//    }
 }
