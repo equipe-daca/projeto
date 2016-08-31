@@ -28,15 +28,13 @@ public class ProblemController {
             @RequestParam(value = "user", required = false) String user){
 
         List<Problem> problems = service.getProblems();
-
         return new ResponseEntity<>(problems, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{problemCode}", method=RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Problem> getProblem(@PathVariable Long problemCode){
-
-        Problem  problem = new Problem("Nome", "Descrição", "Dica", new ArrayList<Test>());
+        Problem  problem = service.getProblem(problemCode);
         return new ResponseEntity<>(problem, HttpStatus.OK);
     }
 

@@ -1,30 +1,49 @@
 package br.edu.ufcg.models;
 
-import br.edu.ufcg.UserClass;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class User {
+@Entity
+public class User implements Serializable {
 
-    private long id;
-    private String email, password;
-    private UserClass userClass;
-    private transient int solvedProblems;
-
-    public User() {
+    public enum Class {
+        NORMAL, ADMIN;
     }
 
-    public User(long id, String email, String password, UserClass userClass, int solvedProblems) {
-        this.id = id;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Column(nullable = false)
+    private String email;
+    @Column(nullable = false)
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private Class userClass;
+    @OneToMany
+    @MapKeyClass(Solution.class)
+    private Map<Solution, Problem> solutions;
+    @OneToMany(mappedBy = "owner")
+    private List<Problem> problems;
+
+    public User() {
+        this.solutions = new HashMap<>();
+    }
+
+    public User(String email, String password, Class userClass) {
         this.email = email;
         this.password = password;
         this.userClass = userClass;
-        this.solvedProblems = solvedProblems;
+        this.solutions = new HashMap<>();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -44,19 +63,19 @@ public class User {
         this.password = password;
     }
 
-    public UserClass getUserClass() {
+    public Class getUserClass() {
         return userClass;
     }
 
-    public void setUserClass(UserClass userClass) {
+    public void setUserClass(Class userClass) {
         this.userClass = userClass;
     }
 
-    public int getSolvedProblems() {
-        return solvedProblems;
+    public Map<Solution, Problem> getSolutions() {
+        return solutions;
     }
 
-    public void setSolvedProblems(int solvedProblems) {
-        this.solvedProblems = solvedProblems;
+    public void setSolutions(Map<Solution, Problem> solutions) {
+        this.solutions = solutions;
     }
 }

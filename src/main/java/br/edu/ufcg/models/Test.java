@@ -20,6 +20,10 @@ public class Test implements Serializable {
     private String output;
     @Column
     private boolean publicTest;
+    @ManyToOne
+    private Problem problem;
+    @ManyToOne
+    private Solution solution;
 
     public Test() {
     }

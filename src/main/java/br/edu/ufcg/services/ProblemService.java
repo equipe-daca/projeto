@@ -8,5 +8,6 @@ import java.util.List;
 public interface ProblemService {
 
     List<Problem> getProblems();
+    Problem getProblem(Long id);
 
 }

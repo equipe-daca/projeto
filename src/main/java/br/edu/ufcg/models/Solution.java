@@ -1,18 +1,44 @@
 package br.edu.ufcg.models;
 
+import com.google.common.collect.Lists;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
-public class Solution {
+@Entity
+public class Solution implements Serializable {
 
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column
     private String body;
-    private Map<String, String> inputs;
-
+    @OneToMany(mappedBy = "solution")
+    @OrderColumn
+    private List<Test> tests;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar created;
     public Solution() {
+        this.created = Calendar.getInstance();
+        this.tests = Lists.newArrayList();
     }
 
-    public Solution(String body, Map<String, String> inputs) {
+    public Solution(String body) {
         this.body = body;
-        this.inputs = inputs;
+        this.created = Calendar.getInstance();
+        this.tests = Lists.newArrayList();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBody() {
@@ -23,11 +49,19 @@ public class Solution {
         this.body = body;
     }
 
-    public Map<String, String> getInputs() {
-        return inputs;
+    public List<Test> getTests() {
+        return tests;
     }
 
-    public void setInputs(Map<String, String> inputs) {
-        this.inputs = inputs;
+    public void setTests(List<Test> tests) {
+        this.tests = tests;
+    }
+
+    public Calendar getCreated() {
+        return created;
+    }
+
+    public void setCreated(Calendar created) {
+        this.created = created;
     }
 }

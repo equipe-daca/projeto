@@ -10,6 +10,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -26,9 +27,13 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-//        List<Test> testes = new ArrayList<>();
-//        testes.add(new Test("nome", "dica", "in", "out", true));
-//        Problem p1 = new Problem("nome", "descricao", "dica", testes);
-//        problemRepo.save(p1);
+        for(int i = 1; i <= 5; i++){
+            Problem problem = new Problem();
+            problem.setName("name" + i);
+            problem.setDesc("desc" + i);
+            problem.setTip("tip" + i);
+            problem.setTests(Collections.emptyList());
+            problemRepo.save(problem);
+        }
     }
 }

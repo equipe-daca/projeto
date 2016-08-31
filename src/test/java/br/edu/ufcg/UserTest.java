@@ -42,8 +42,7 @@ public class UserTest {
 
     @Test
     public void createUser() throws Exception {
-        long id = 3232;
-        User user = new User(id, "user@email", "password", UserClass.NORMAL, 0);
+        User user = new User("user@email", "password", User.Class.NORMAL);
 
         given()
                 .contentType(ContentType.JSON)
@@ -52,8 +51,6 @@ public class UserTest {
                 .port(this.port)
                 .post("/user")
         .then().assertThat()
-                .statusCode(is(200))
-                .body("id", equalTo((int) id))
-                .body(not(hasProperty("solvedProblems")));
+                .statusCode(is(200));
     }
 }

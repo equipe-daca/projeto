@@ -1,5 +1,6 @@
 package br.edu.ufcg.models;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 
 import javax.persistence.*;
@@ -18,19 +19,22 @@ public class Problem implements Serializable {
     private String desc;
     @Column
     private String tip;
-    // TODO: 30/08/16 Diferença entre o EAGER e LAZY?
-    @OneToMany(fetch=FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "problem", fetch=FetchType.EAGER) //, orphanRemoval = true, cascade = CascadeType.ALL)
     @OrderColumn
     private List<Test> tests;
 
+    @ManyToOne
+    private User owner;
+
     public Problem() {
+        this.tests = Lists.newArrayList();
     }
 
-    public Problem(String name, String desc, String tip, List<Test> tests) {
+    public Problem(String name, String desc, String tip) {
         this.name = name;
         this.desc = desc;
         this.tip = tip;
-        this.tests = tests;
+        this.tests = Lists.newArrayList();
     }
 
     public Long getId() {
@@ -71,6 +75,14 @@ public class Problem implements Serializable {
 
     public void setTests(List<Test> tests) {
         this.tests = tests;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     @Override
