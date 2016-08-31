@@ -22,7 +22,6 @@ public class Problem implements Serializable {
     @OneToMany(mappedBy = "problem", fetch=FetchType.EAGER) //, orphanRemoval = true, cascade = CascadeType.ALL)
     @OrderColumn
     private List<Test> tests;
-
     @ManyToOne
     private User owner;
 

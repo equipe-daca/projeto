@@ -1,7 +1,9 @@
 package br.edu.ufcg;
 
 import br.edu.ufcg.models.Problem;
+import br.edu.ufcg.models.User;
 import br.edu.ufcg.repositories.ProblemRepository;
+import br.edu.ufcg.repositories.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import org.junit.Before;
@@ -28,6 +30,7 @@ public class ProblemTest {
     private int port;
     private Gson gson;
     private ProblemRepository problemRepo;
+    private UserRepository userRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -39,10 +42,32 @@ public class ProblemTest {
         this.problemRepo = problemRepo;
     }
 
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Test
     public void getProblem() throws Exception {
+
+        User user = new User();
+        user.setEmail("user@mail.com");
+        user.setPassword("123456");
+        user.setUserClass(User.Class.NORMAL);
+
+        userRepository.save(user);
+
+        Problem problem = new Problem();
+        problem.setName("name1");
+        problem.setDesc("desc1");
+        problem.setTip("tip1");
+        problem.setOwner(user);
+
+        problemRepo.save(problem);
+
         given()
-                .accept("application/json")
+                .contentType(ContentType.JSON)
+                .body(gson.toJson(problem))
         .when()
                 .port(this.port)
                 .get("/problem/1")
@@ -53,6 +78,7 @@ public class ProblemTest {
                 .body("name",equalTo("name1"))
                 .body("desc",equalTo("desc1"))
                 .body("tip",equalTo("tip1"))
+                .body("user",equalTo(user))
                 .body("tests", empty());
     }
 
@@ -61,6 +87,7 @@ public class ProblemTest {
     public void getProblems() throws Exception {
 
         List<Problem> list = problemRepo.findAll();
+
 
         given()
                 .param("sort", false)

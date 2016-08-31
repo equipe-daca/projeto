@@ -1,11 +1,13 @@
 package br.edu.ufcg;
 
 import br.edu.ufcg.models.User;
+import br.edu.ufcg.repositories.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -22,6 +24,12 @@ public class UserTest {
     @Value("${local.server.port}")
     private int port;
     private Gson gson;
+    private UserRepository userRepository;
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -30,6 +38,14 @@ public class UserTest {
 
     @Test
     public void getUser() throws Exception {
+
+        User user = new User();
+        user.setEmail("user@mail.com");
+        user.setPassword("123456");
+        user.setUserClass(User.Class.NORMAL);
+
+        userRepository.save(user);
+
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", 1)
@@ -37,6 +53,8 @@ public class UserTest {
                 .port(this.port)
                 .get("/user/{code}")
         .then().assertThat()
+                .body("email", equalTo("user@mail.com"))
+                .body("password", equalTo("123456"))
                 .statusCode(is(200));
     }
 

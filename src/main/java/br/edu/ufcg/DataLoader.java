@@ -27,13 +27,12 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        for(int i = 1; i <= 5; i++){
-            Problem problem = new Problem();
-            problem.setName("name" + i);
-            problem.setDesc("desc" + i);
-            problem.setTip("tip" + i);
-            problem.setTests(Collections.emptyList());
-            problemRepo.save(problem);
-        }
+//        for(int i = 1; i <= 5; i++){
+//            Problem problem = new Problem();
+//            problem.setName("name" + i);
+//            problem.setDesc("desc" + i);
+//            problem.setTip("tip" + i);
+//            problemRepo.save(problem);
+//        }
     }
 }
