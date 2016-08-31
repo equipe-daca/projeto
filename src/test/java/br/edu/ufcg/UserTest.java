@@ -60,7 +60,11 @@ public class UserTest {
 
     @Test
     public void createUser() throws Exception {
-        User user = new User("user@email", "password", User.Class.NORMAL);
+        
+        User user = new User();
+        user.setEmail("user@mail.com");
+        user.setPassword("123456");
+        user.setUserClass(User.Class.NORMAL);
 
         given()
                 .contentType(ContentType.JSON)
@@ -69,6 +73,8 @@ public class UserTest {
                 .port(this.port)
                 .post("/user")
         .then().assertThat()
+                .body("email", equalTo("user@mail.com"))
+                .body("password", equalTo("123456"))
                 .statusCode(is(200));
     }
 }
