@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value="/user", produces="application/json")
 public class UserController {
@@ -14,11 +16,24 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @RequestMapping(method=RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<List<User>> getUsers(){
+        List<User> users =  userService.getUsers();
+        if(!users.isEmpty()){
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @RequestMapping(value="/{userCode}", method=RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<User> getUser(@PathVariable long userCode){
-        User user = userService.get(userCode);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        if(userService.exists(userCode)){
+            User user = userService.get(userCode);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method=RequestMethod.POST)

@@ -4,6 +4,7 @@ import br.edu.ufcg.models.User;
 import br.edu.ufcg.repositories.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,7 @@ public class UserTest {
     private int port;
     private Gson gson;
     private UserRepository userRepository;
+    private User user1, user2;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -34,66 +36,112 @@ public class UserTest {
     @Before
     public void setUp() throws Exception {
         gson = new Gson();
+        user1 = new User("user1@mail.com", "123456", User.Class.NORMAL);
+        user2 = new User("user2@mail.com", "123456", User.Class.NORMAL);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        userRepository.deleteAll();
     }
 
     @Test
-    public void getUser() throws Exception {
-
-        User user = new User();
-        user.setEmail("user@mail.com");
-        user.setPassword("123456");
-        user.setUserClass(User.Class.NORMAL);
-
-        userRepository.save(user);
+    public void getUserListWithOneElement() throws Exception {
+        userRepository.save(user1);
 
         given()
-                .contentType(ContentType.JSON)
-                .pathParam("code", 1)
+            .contentType(ContentType.JSON)
         .when()
-                .port(this.port)
-                .get("/user/{code}")
+            .port(this.port)
+            .get("/user")
         .then().assertThat()
-                .body("email", equalTo("user@mail.com"))
-                .body("password", equalTo("123456"))
-                .statusCode(is(200));
+            .body("", hasSize(1))
+            .statusCode(is(200));
+    }
+
+    @Test
+    public void getUserListWithTwoElements() throws Exception {
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+
+        given()
+            .contentType(ContentType.JSON)
+        .when()
+            .port(this.port)
+            .get("/user")
+        .then().assertThat()
+            .body("", hasSize(2))
+            .statusCode(is(200));
+    }
+
+    @Test
+    public void getUserListWithZeroElements() throws Exception {
+
+        given()
+            .contentType(ContentType.JSON)
+        .when()
+            .port(this.port)
+            .get("/user")
+        .then().assertThat()
+            .statusCode(is(404));
+    }
+
+    @Test
+    public void getUserWithValidId() throws Exception {
+        userRepository.save(user1);
+
+        given()
+            .contentType(ContentType.JSON)
+            .pathParam("code", user1.getId())
+        .when()
+            .port(this.port)
+            .get("/user/{code}")
+        .then().assertThat()
+            .body("email", equalTo("user1@mail.com"))
+            .body("password", equalTo("123456"))
+            .statusCode(is(200));
+    }
+
+    @Test
+    public void getUserWithInvalidId() throws Exception {
+
+        given()
+            .contentType(ContentType.JSON)
+            .pathParam("code", 1)
+        .when()
+            .port(this.port)
+            .get("/user/{code}")
+        .then().assertThat()
+            .statusCode(is(404));
     }
 
     @Test
     public void createUser() throws Exception {
 
-        User user = new User();
-        user.setEmail("user@mail.com");
-        user.setPassword("123456");
-        user.setUserClass(User.Class.NORMAL);
-
         given()
-                .contentType(ContentType.JSON)
-                .body(gson.toJson(user))
+            .contentType(ContentType.JSON)
+            .body(gson.toJson(user1))
         .when()
-                .port(this.port)
-                .post("/user")
+            .port(this.port)
+            .post("/user")
         .then().assertThat()
-                .body("email", equalTo("user@mail.com"))
-                .body("password", equalTo("123456"))
-                .statusCode(is(200));
+            .body("email", equalTo("user1@mail.com"))
+            .body("password", equalTo("123456"))
+            .statusCode(is(200));
     }
 
     @Test
     public void updateUser() throws Exception {
 
-        User user = new User();
-        user.setEmail("user@mail.com");
-        user.setPassword("123456");
-        user.setUserClass(User.Class.NORMAL);
+        userRepository.save(user1);
 
-        userRepository.save(user);
-
-        user.setEmail("newUser@mail.com");
+        user1.setEmail("newUser@mail.com");
 
         given()
             .contentType(ContentType.JSON)
-            .pathParam("code", 1)
-            .body(gson.toJson(user))
+            .pathParam("code", user1.getId())
+            .body(gson.toJson(user1))
         .when()
             .port(this.port)
             .put("/user/{code}")
@@ -104,12 +152,7 @@ public class UserTest {
     }
 
     @Test
-    public void deleteUser() throws Exception {
-
-        User user = new User();
-        user.setEmail("user@mail.com");
-        user.setPassword("123456");
-        user.setUserClass(User.Class.NORMAL);
+    public void deleteInexistentUser() throws Exception {
 
         given()
             .contentType(ContentType.JSON)
@@ -120,11 +163,16 @@ public class UserTest {
         .then().assertThat()
             .statusCode(is(404));
 
-        userRepository.save(user);
+    }
+
+    @Test
+    public void deleteUser() throws Exception {
+
+        userRepository.save(user1);
 
         given()
             .contentType(ContentType.JSON)
-            .pathParam("code", 1)
+            .pathParam("code", user1.getId())
         .when()
             .port(this.port)
             .delete("/user/{code}")

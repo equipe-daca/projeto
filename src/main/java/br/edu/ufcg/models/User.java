@@ -24,10 +24,10 @@ public class User implements Serializable{
     private String password;
     @Enumerated(EnumType.STRING)
     private Class userClass;
-    @OneToMany
+    @OneToMany(fetch=FetchType.EAGER)
     @MapKeyClass(Solution.class)
     private Map<Solution, Problem> solutions;
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch=FetchType.EAGER)
     private List<Problem> problems;
 
     public User() {
