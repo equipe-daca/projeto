@@ -24,22 +24,28 @@ public class UserController {
     @RequestMapping(method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<User> createUser(@RequestBody User user){
-        // TODO: 31/08/2016 Melhora lógica
-        userService.save(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        // TODO: 31/08/2016 Verificar Lógica Bizonha
+        User u = userService.save(user);
+        return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{userId}", method=RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<User> updateUser(@PathVariable long userId, @RequestBody User user){
-        user.setId(userId);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        // TODO: 31/08/2016 Verificar Lógica Bizonha
+        User u = userService.update(userId, user);
+        return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/{userId}", method=RequestMethod.DELETE)
+    @RequestMapping(value="/{userCode}", method=RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<User> deleteUser(@PathVariable long userId, @RequestBody User user){
-        user.setId(userId);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<User> deleteUser(@PathVariable long userCode){
+        // TODO: 31/08/2016 Verificar Lógica Bizonha
+
+        if(userService.exists(userCode)){
+            userService.delete(userCode);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

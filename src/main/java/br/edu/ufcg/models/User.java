@@ -1,5 +1,7 @@
 package br.edu.ufcg.models;
 
+import com.google.gson.Gson;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -7,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-public class User implements Serializable {
+public class User implements Serializable{
 
     public enum Class {
         NORMAL, ADMIN;
@@ -77,5 +79,11 @@ public class User implements Serializable {
 
     public void setSolutions(Map<Solution, Problem> solutions) {
         this.solutions = solutions;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this).toString();
     }
 }

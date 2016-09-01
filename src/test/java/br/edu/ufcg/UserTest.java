@@ -60,7 +60,7 @@ public class UserTest {
 
     @Test
     public void createUser() throws Exception {
-        
+
         User user = new User();
         user.setEmail("user@mail.com");
         user.setPassword("123456");
@@ -76,5 +76,68 @@ public class UserTest {
                 .body("email", equalTo("user@mail.com"))
                 .body("password", equalTo("123456"))
                 .statusCode(is(200));
+    }
+
+    @Test
+    public void updateUser() throws Exception {
+
+        User user = new User();
+        user.setEmail("user@mail.com");
+        user.setPassword("123456");
+        user.setUserClass(User.Class.NORMAL);
+
+        userRepository.save(user);
+
+        user.setEmail("newUser@mail.com");
+
+        given()
+            .contentType(ContentType.JSON)
+            .pathParam("code", 1)
+            .body(gson.toJson(user))
+        .when()
+            .port(this.port)
+            .put("/user/{code}")
+        .then().assertThat()
+            .body("email", equalTo("newUser@mail.com"))
+            .body("password", equalTo("123456"))
+            .statusCode(is(200));
+    }
+
+    @Test
+    public void deleteUser() throws Exception {
+
+        User user = new User();
+        user.setEmail("user@mail.com");
+        user.setPassword("123456");
+        user.setUserClass(User.Class.NORMAL);
+
+        given()
+            .contentType(ContentType.JSON)
+            .pathParam("code", 1)
+        .when()
+            .port(this.port)
+            .delete("/user/{code}")
+        .then().assertThat()
+            .statusCode(is(404));
+
+        userRepository.save(user);
+
+        given()
+            .contentType(ContentType.JSON)
+            .pathParam("code", 1)
+        .when()
+            .port(this.port)
+            .delete("/user/{code}")
+        .then().assertThat()
+            .statusCode(is(200));
+
+        given()
+            .contentType(ContentType.JSON)
+            .pathParam("code", 1)
+        .when()
+            .port(this.port)
+            .delete("/user/{code}")
+        .then().assertThat()
+            .statusCode(is(404));
     }
 }

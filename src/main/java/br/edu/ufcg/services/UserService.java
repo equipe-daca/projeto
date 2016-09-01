@@ -7,4 +7,7 @@ public interface UserService {
 
     User save(User user);
     User get(Long id);
+    User update(Long id, User user);
+    void delete(Long id);
+    boolean exists(Long id);
 }
