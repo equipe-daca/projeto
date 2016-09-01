@@ -37,7 +37,7 @@ public class UserTest {
     public void setUp() throws Exception {
         gson = new Gson();
         user1 = new User("user1@mail.com", "123456", User.Class.NORMAL);
-        user2 = new User("user2@mail.com", "123456", User.Class.NORMAL);
+        user2 = new User("user2@mail.com", "123456", User.Class.ADMIN);
     }
 
     @After
@@ -84,7 +84,8 @@ public class UserTest {
             .port(this.port)
             .get("/user")
         .then().assertThat()
-            .statusCode(is(404));
+            .body("", is(empty()))
+            .statusCode(is(200));
     }
 
     @Test
@@ -100,7 +101,25 @@ public class UserTest {
         .then().assertThat()
             .body("email", equalTo("user1@mail.com"))
             .body("password", equalTo("123456"))
+            .body("userClass", equalTo("NORMAL"))
             .statusCode(is(200));
+    }
+
+    @Test
+    public void getUserWithAdminClass() throws Exception {
+        userRepository.save(user2);
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("code", user2.getId())
+                .when()
+                .port(this.port)
+                .get("/user/{code}")
+                .then().assertThat()
+                .body("email", equalTo("user2@mail.com"))
+                .body("password", equalTo("123456"))
+                .body("userClass", equalTo("ADMIN"))
+                .statusCode(is(200));
     }
 
     @Test
@@ -128,6 +147,7 @@ public class UserTest {
         .then().assertThat()
             .body("email", equalTo("user1@mail.com"))
             .body("password", equalTo("123456"))
+            .body("userClass", equalTo("NORMAL"))
             .statusCode(is(200));
     }
 
@@ -148,6 +168,7 @@ public class UserTest {
         .then().assertThat()
             .body("email", equalTo("newUser@mail.com"))
             .body("password", equalTo("123456"))
+            .body("userClass", equalTo("NORMAL"))
             .statusCode(is(200));
     }
 

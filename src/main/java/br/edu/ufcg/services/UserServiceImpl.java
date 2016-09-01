@@ -36,13 +36,11 @@ public class UserServiceImpl implements UserService {
         if(u != null){
             u = user;
         }
-
         return userRepository.save(u);
     }
 
     @Override
     public void delete(Long id) {
-
         if(userRepository.exists(id)){
             userRepository.delete(id);
         }

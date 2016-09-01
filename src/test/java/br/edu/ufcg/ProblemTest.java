@@ -6,6 +6,7 @@ import br.edu.ufcg.repositories.ProblemRepository;
 import br.edu.ufcg.repositories.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +16,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -29,17 +28,14 @@ public class ProblemTest {
     @Value("${local.server.port}")
     private int port;
     private Gson gson;
-    private ProblemRepository problemRepo;
+    private ProblemRepository problemRepository;
     private UserRepository userRepository;
-
-    @Before
-    public void setUp() throws Exception {
-        gson = new Gson();
-    }
+    private User user1, user2;
+    private Problem problem1, problem2;
 
     @Autowired
     public void setProductRepository(ProblemRepository problemRepo) {
-        this.problemRepo = problemRepo;
+        this.problemRepository = problemRepo;
     }
 
     @Autowired
@@ -47,61 +43,65 @@ public class ProblemTest {
         this.userRepository = userRepository;
     }
 
+    @Before
+    public void setUp() throws Exception {
+        gson = new Gson();
+        user1 = new User("user1@mail.com", "123456", User.Class.NORMAL);
+        user2 = new User("user1@mail.com", "123456", User.Class.ADMIN);
+        problem1 = new Problem("name1", "desc1", "tip1");
+        problem1.setOwner(user1);
+        problem2 = new Problem("name2", "desc2", "tip2");
+        problem2.setOwner(user2);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        problemRepository.deleteAll();
+        userRepository.deleteAll();
+    }
+
     @Test
     public void getProblem() throws Exception {
 
-        User user = new User();
-        user.setEmail("user@mail.com");
-        user.setPassword("123456");
-        user.setUserClass(User.Class.NORMAL);
-
-        userRepository.save(user);
-
-        Problem problem = new Problem();
-        problem.setName("name1");
-        problem.setDesc("desc1");
-        problem.setTip("tip1");
-        problem.setOwner(user);
-
-        problemRepo.save(problem);
+        userRepository.save(user1);
+        problemRepository.save(problem1);
 
         given()
-                .contentType(ContentType.JSON)
-                .body(gson.toJson(problem))
+            .contentType(ContentType.JSON)
+            .pathParam("code", problem1.getId())
         .when()
-                .port(this.port)
-                .get("/problem/1")
+            .port(this.port)
+            .get("/problem/{code}")
         .then().assertThat()
-                .statusCode(is(200))
-                .body("", not(empty()))
-                .body("id",equalTo(1))
-                .body("name",equalTo("name1"))
-                .body("desc",equalTo("desc1"))
-                .body("tip",equalTo("tip1"))
-                .body("user",equalTo(user))
-                .body("tests", empty());
+            .statusCode(is(200))
+            .body("", not(empty()))
+            .body("id", equalTo(1))
+            .body("name", equalTo("name1"))
+            .body("desc", equalTo("desc1"))
+            .body("tip", equalTo("tip1"))
+            .body("owner.id", equalTo(user1.getId().intValue()))
+            .body("tests", empty());
     }
 
 
     @Test
     public void getProblems() throws Exception {
 
-        List<Problem> list = problemRepo.findAll();
-
+        List<Problem> list = problemRepository.findAll();
 
         given()
-                .param("sort", false)
-                .param("page", false)
-                .param("user", "123412341234")
+            .param("sort", false)
+            .param("page", false)
+            .param("user", "123412341234")
         .when()
-                .port(this.port)
-                .get("/problem")
+            .port(this.port)
+            .get("/problem")
         .then().assertThat()
-                .statusCode(is(200))
-                .body("find{it.id==1}.name",equalTo("name1"))
-                .body("find{it.id==1}.desc",equalTo("desc1"))
-                .body("find{it.id==1}.tip",equalTo("tip1"))
-                .body("", hasSize(5));
+            .statusCode(is(200))
+            .body("find{it.id==1}.name",equalTo("name1"))
+            .body("find{it.id==1}.desc",equalTo("desc1"))
+            .body("find{it.id==1}.tip",equalTo("tip1"))
+            .body("", hasSize(5));
     }
 
     @Test

@@ -1,17 +1,12 @@
 package br.edu.ufcg.controllers;
 
 import br.edu.ufcg.models.Problem;
-import br.edu.ufcg.models.Test;
-import br.edu.ufcg.repositories.ProblemRepository;
 import br.edu.ufcg.services.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -23,11 +18,16 @@ public class ProblemController {
 
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity< List<Problem>> getProblems(
-            @RequestParam(value = "page", required = false) boolean page,
-            @RequestParam(value = "sort", required = false) boolean sort,
-            @RequestParam(value = "user", required = false) String user){
+            @RequestParam(value = "user", required = false) Long user){
 
-        List<Problem> problems = service.getProblems();
+        List<Problem> problems;
+
+        if(user == null){
+            problems = service.findAll();
+        }else{
+            problems = service.findByOwner(user);
+        }
+
         return new ResponseEntity<>(problems, HttpStatus.OK);
     }
 

@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface ProblemService {
 
-    List<Problem> getProblems();
+
+    List<Problem> findAll();
+    List<Problem> findByOwner(Long userId);
     Problem getProblem(Long id);
 
 }

@@ -20,10 +20,7 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<List<User>> getUsers(){
         List<User> users =  userService.getUsers();
-        if(!users.isEmpty()){
-            return new ResponseEntity<>(users, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{userCode}", method=RequestMethod.GET)

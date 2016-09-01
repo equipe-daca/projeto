@@ -14,8 +14,13 @@ public class ProblemServiceImpl implements ProblemService {
     ProblemRepository problemRepo;
 
     @Override
-    public List<Problem> getProblems() {
+    public List<Problem> findAll() {
         return problemRepo.findAll();
+    }
+
+    @Override
+    public List<Problem> findByOwner(Long id) {
+        return problemRepo.findByOwner(id);
     }
 
     @Override

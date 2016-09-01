@@ -2,7 +2,6 @@ package br.edu.ufcg.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Map;
 
 @Entity
 public class Test implements Serializable {
