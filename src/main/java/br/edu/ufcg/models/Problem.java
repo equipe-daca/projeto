@@ -84,9 +84,4 @@ public class Problem implements Serializable {
         this.owner = owner;
     }
 
-    @Override
-    public String toString() {
-        Gson gson = new Gson();
-        return gson.toJson(this).toString();
-    }
 }

@@ -11,20 +11,48 @@ import java.util.List;
 public class ProblemServiceImpl implements ProblemService {
 
     @Autowired
-    ProblemRepository problemRepo;
+    ProblemRepository problemRepository;
 
     @Override
     public List<Problem> findAll() {
-        return problemRepo.findAll();
+        return problemRepository.findAll();
     }
 
     @Override
-    public List<Problem> findByOwner(Long id) {
-        return problemRepo.findByOwner(id);
+    public List<Problem> findByOwnerId(Long user) {
+        return problemRepository.findByOwnerId(user);
     }
 
     @Override
     public Problem getProblem(Long id) {
-        return problemRepo.findOne(id);
+        return problemRepository.findOne(id);
+    }
+
+    @Override
+    public Problem createProblem(Problem problem) {
+        return problemRepository.save(problem);
+    }
+
+    @Override
+    public Problem updateProblem(Long id, Problem problem) {
+
+        Problem p = problemRepository.findOne(id);
+
+        if(p != null){
+            p = problem;
+        }
+        return problemRepository.save(p);
+    }
+
+    @Override
+    public void delete(Long id) {
+        if(problemRepository.exists(id)){
+            problemRepository.delete(id);
+        }
+    }
+
+    @Override
+    public boolean exists(Long id) {
+        return problemRepository.exists(id);
     }
 }

@@ -50,13 +50,13 @@ public class UserTest {
         userRepository.save(user1);
 
         given()
-            .contentType(ContentType.JSON)
+                .contentType(ContentType.JSON)
         .when()
-            .port(this.port)
-            .get("/user")
+                .port(this.port)
+                .get("/user")
         .then().assertThat()
-            .body("", hasSize(1))
-            .statusCode(is(200));
+                .body("", hasSize(1))
+                .statusCode(is(200));
     }
 
     @Test
@@ -66,26 +66,26 @@ public class UserTest {
         userRepository.save(user2);
 
         given()
-            .contentType(ContentType.JSON)
+                .contentType(ContentType.JSON)
         .when()
-            .port(this.port)
-            .get("/user")
+                .port(this.port)
+                .get("/user")
         .then().assertThat()
-            .body("", hasSize(2))
-            .statusCode(is(200));
+                .body("", hasSize(2))
+                .statusCode(is(200));
     }
 
     @Test
     public void getUserListWithZeroElements() throws Exception {
 
         given()
-            .contentType(ContentType.JSON)
+                .contentType(ContentType.JSON)
         .when()
-            .port(this.port)
-            .get("/user")
+                .port(this.port)
+                .get("/user")
         .then().assertThat()
-            .body("", is(empty()))
-            .statusCode(is(200));
+                .body("", is(empty()))
+                .statusCode(is(200));
     }
 
     @Test
@@ -93,16 +93,16 @@ public class UserTest {
         userRepository.save(user1);
 
         given()
-            .contentType(ContentType.JSON)
-            .pathParam("code", user1.getId())
+                .contentType(ContentType.JSON)
+                .pathParam("code", user1.getId())
         .when()
-            .port(this.port)
-            .get("/user/{code}")
+                .port(this.port)
+                .get("/user/{code}")
         .then().assertThat()
-            .body("email", equalTo("user1@mail.com"))
-            .body("password", equalTo("123456"))
-            .body("userClass", equalTo("NORMAL"))
-            .statusCode(is(200));
+                .body("email", equalTo("user1@mail.com"))
+                .body("password", equalTo("123456"))
+                .body("userClass", equalTo("NORMAL"))
+                .statusCode(is(200));
     }
 
     @Test
@@ -112,10 +112,10 @@ public class UserTest {
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", user2.getId())
-                .when()
+        .when()
                 .port(this.port)
                 .get("/user/{code}")
-                .then().assertThat()
+        .then().assertThat()
                 .body("email", equalTo("user2@mail.com"))
                 .body("password", equalTo("123456"))
                 .body("userClass", equalTo("ADMIN"))
@@ -126,29 +126,29 @@ public class UserTest {
     public void getUserWithInvalidId() throws Exception {
 
         given()
-            .contentType(ContentType.JSON)
-            .pathParam("code", 1)
+                .contentType(ContentType.JSON)
+                .pathParam("code", 1)
         .when()
-            .port(this.port)
-            .get("/user/{code}")
+                .port(this.port)
+                .get("/user/{code}")
         .then().assertThat()
-            .statusCode(is(404));
+                .statusCode(is(404));
     }
 
     @Test
     public void createUser() throws Exception {
 
         given()
-            .contentType(ContentType.JSON)
-            .body(gson.toJson(user1))
+                .contentType(ContentType.JSON)
+                .body(gson.toJson(user1))
         .when()
-            .port(this.port)
-            .post("/user")
+                .port(this.port)
+                .post("/user")
         .then().assertThat()
-            .body("email", equalTo("user1@mail.com"))
-            .body("password", equalTo("123456"))
-            .body("userClass", equalTo("NORMAL"))
-            .statusCode(is(200));
+                .body("email", equalTo("user1@mail.com"))
+                .body("password", equalTo("123456"))
+                .body("userClass", equalTo("NORMAL"))
+                .statusCode(is(200));
     }
 
     @Test
@@ -159,30 +159,30 @@ public class UserTest {
         user1.setEmail("newUser@mail.com");
 
         given()
-            .contentType(ContentType.JSON)
-            .pathParam("code", user1.getId())
-            .body(gson.toJson(user1))
+                .contentType(ContentType.JSON)
+                .pathParam("code", user1.getId())
+                .body(gson.toJson(user1))
         .when()
-            .port(this.port)
-            .put("/user/{code}")
+                .port(this.port)
+                .put("/user/{code}")
         .then().assertThat()
-            .body("email", equalTo("newUser@mail.com"))
-            .body("password", equalTo("123456"))
-            .body("userClass", equalTo("NORMAL"))
-            .statusCode(is(200));
+                .body("email", equalTo("newUser@mail.com"))
+                .body("password", equalTo("123456"))
+                .body("userClass", equalTo("NORMAL"))
+                .statusCode(is(200));
     }
 
     @Test
     public void deleteInexistentUser() throws Exception {
 
         given()
-            .contentType(ContentType.JSON)
-            .pathParam("code", 1)
+                .contentType(ContentType.JSON)
+                .pathParam("code", 1)
         .when()
-            .port(this.port)
-            .delete("/user/{code}")
+                .port(this.port)
+                .delete("/user/{code}")
         .then().assertThat()
-            .statusCode(is(404));
+                .statusCode(is(404));
 
     }
 
@@ -192,21 +192,21 @@ public class UserTest {
         userRepository.save(user1);
 
         given()
-            .contentType(ContentType.JSON)
-            .pathParam("code", user1.getId())
+                .contentType(ContentType.JSON)
+                .pathParam("code", user1.getId())
         .when()
-            .port(this.port)
-            .delete("/user/{code}")
+                .port(this.port)
+                .delete("/user/{code}")
         .then().assertThat()
-            .statusCode(is(200));
+                .statusCode(is(200));
 
         given()
-            .contentType(ContentType.JSON)
-            .pathParam("code", 1)
+                .contentType(ContentType.JSON)
+                .pathParam("code", 1)
         .when()
-            .port(this.port)
-            .delete("/user/{code}")
+                .port(this.port)
+                .delete("/user/{code}")
         .then().assertThat()
-            .statusCode(is(404));
+                .statusCode(is(404));
     }
 }

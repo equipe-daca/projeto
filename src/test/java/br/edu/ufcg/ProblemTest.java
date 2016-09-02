@@ -61,88 +61,113 @@ public class ProblemTest {
     }
 
     @Test
+    public void getProblems() throws Exception {
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+
+        given()
+                .contentType(ContentType.JSON)
+                .queryParam("user", user1.getId())
+                .when()
+                .port(this.port)
+                .get("/problem")
+                .then().assertThat()
+                .statusCode(is(200))
+                .body("find{it.id=="+problem1.getId()+"}.name",equalTo("name1"))
+                .body("find{it.id=="+problem1.getId()+"}.desc",equalTo("desc1"))
+                .body("find{it.id=="+problem1.getId()+"}.tip",equalTo("tip1"))
+                .body("", hasSize(1));
+    }
+
+    @Test
     public void getProblem() throws Exception {
 
         userRepository.save(user1);
         problemRepository.save(problem1);
 
         given()
-            .contentType(ContentType.JSON)
-            .pathParam("code", problem1.getId())
+                .contentType(ContentType.JSON)
+                .pathParam("code", problem1.getId())
         .when()
-            .port(this.port)
-            .get("/problem/{code}")
+                .port(this.port)
+                .get("/problem/{code}")
         .then().assertThat()
-            .statusCode(is(200))
-            .body("", not(empty()))
-            .body("id", equalTo(1))
-            .body("name", equalTo("name1"))
-            .body("desc", equalTo("desc1"))
-            .body("tip", equalTo("tip1"))
-            .body("owner.id", equalTo(user1.getId().intValue()))
-            .body("tests", empty());
-    }
-
-
-    @Test
-    public void getProblems() throws Exception {
-
-        List<Problem> list = problemRepository.findAll();
-
-        given()
-            .param("sort", false)
-            .param("page", false)
-            .param("user", "123412341234")
-        .when()
-            .port(this.port)
-            .get("/problem")
-        .then().assertThat()
-            .statusCode(is(200))
-            .body("find{it.id==1}.name",equalTo("name1"))
-            .body("find{it.id==1}.desc",equalTo("desc1"))
-            .body("find{it.id==1}.tip",equalTo("tip1"))
-            .body("", hasSize(5));
+                .statusCode(is(200))
+                .body("", not(empty()))
+                .body("id", equalTo(problem1.getId().intValue()))
+                .body("name", equalTo("name1"))
+                .body("desc", equalTo("desc1"))
+                .body("tip", equalTo("tip1"))
+                .body("owner.id", equalTo(user1.getId().intValue()))
+                .body("tests", empty());
     }
 
     @Test
     public void createProblem() throws Exception {
-        Problem problem = new Problem("Name", "Desc", "Tip");
+
+        userRepository.save(user1);
 
         given()
                 .contentType(ContentType.JSON)
-                .body(gson.toJson(problem))
+                .body(gson.toJson(problem1))
         .when()
                 .port(this.port)
                 .post("/problem")
         .then().assertThat()
-                .statusCode(is(200));
+                .statusCode(is(200))
+                .body("", not(empty()))
+                .body("name", equalTo("name1"))
+                .body("desc", equalTo("desc1"))
+                .body("tip", equalTo("tip1"))
+                .body("owner.id", equalTo(user1.getId().intValue()))
+                .body("tests", empty());
     }
 
     @Test
     public void updateProblem() throws Exception {
-        Problem problem = new Problem("Name", "Desc", "Tip");
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+        problem1.setName("name2");
 
         given()
                 .contentType(ContentType.JSON)
-                .body(gson.toJson(problem))
+                .body(gson.toJson(problem1))
+                .pathParam("code", problem1.getId())
         .when()
                 .port(this.port)
-                .put("/problem/1")
+                .put("/problem/{code}")
         .then().assertThat()
+                .body("", not(empty()))
+                .body("name", equalTo("name2"))
+                .body("desc", equalTo("desc1"))
+                .body("tip", equalTo("tip1"))
                 .statusCode(is(200));
     }
 
     @Test
     public void deleteProblem() throws Exception {
-        Problem problem = new Problem("Name", "Desc", "Tip");
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
 
         given()
                 .contentType(ContentType.JSON)
-                .body(gson.toJson(problem))
+                .pathParam("code", problem1.getId())
         .when()
                 .port(this.port)
-                .delete("/problem/1")
+                .delete("/problem/{code}")
         .then().assertThat()
                 .statusCode(is(200));
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("code", problem1.getId())
+        .when()
+                .port(this.port)
+                .delete("/problem/{code}")
+        .then().assertThat()
+                .statusCode(is(404));
     }
 }

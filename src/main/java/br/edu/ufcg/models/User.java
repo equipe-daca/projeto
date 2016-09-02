@@ -81,9 +81,4 @@ public class User implements Serializable{
         this.solutions = solutions;
     }
 
-    @Override
-    public String toString() {
-        Gson gson = new Gson();
-        return gson.toJson(this).toString();
-    }
 }

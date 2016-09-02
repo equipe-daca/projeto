@@ -22,11 +22,15 @@ public class ProblemController {
 
         List<Problem> problems;
 
+        System.out.println("USER: " + user);
+
         if(user == null){
             problems = service.findAll();
         }else{
-            problems = service.findByOwner(user);
+            problems = service.findByOwnerId(user);
         }
+
+        System.out.println("USER: " + problems);
 
         return new ResponseEntity<>(problems, HttpStatus.OK);
     }
@@ -41,18 +45,24 @@ public class ProblemController {
     @RequestMapping(method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Problem> createProblem(@RequestBody Problem problem){
-        return new ResponseEntity<>(problem, HttpStatus.OK);
+        Problem p = service.createProblem(problem);
+        return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{problemCode}", method=RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<Problem> updateProblem(@PathVariable Long problemCode, @RequestBody Problem problem){
-        return new ResponseEntity<>(problem, HttpStatus.OK);
+        Problem p = service.updateProblem(problemCode, problem);
+        return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{problemCode}", method=RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<Problem> deleteProblem(@PathVariable Long problemCode, @RequestBody Problem problem){
-        return new ResponseEntity<>(problem, HttpStatus.OK);
+    public ResponseEntity<Problem> deleteProblem(@PathVariable Long problemCode){
+        if(service.exists(problemCode)){
+            service.delete(problemCode);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
