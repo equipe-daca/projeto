@@ -13,8 +13,3 @@ deploy:
     except:
     - dev-diego
     - dev-gervasio
-
-  # safelist
-  branches:
-    only:
-    - master
