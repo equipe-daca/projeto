@@ -17,20 +17,20 @@ public class Solution implements Serializable {
 
     @Column
     private String body;
-    @OneToMany(mappedBy = "solution")
-    @OrderColumn
-    private List<Test> tests;
+//    @OneToMany(mappedBy = "solution")
+//    @OrderColumn
+//    private List<Test> tests;
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar created;
     public Solution() {
         this.created = Calendar.getInstance();
-        this.tests = Lists.newArrayList();
+//        this.tests = Lists.newArrayList();
     }
 
     public Solution(String body) {
         this.body = body;
         this.created = Calendar.getInstance();
-        this.tests = Lists.newArrayList();
+//        this.tests = Lists.newArrayList();
     }
 
     public Long getId() {
@@ -49,13 +49,13 @@ public class Solution implements Serializable {
         this.body = body;
     }
 
-    public List<Test> getTests() {
-        return tests;
-    }
-
-    public void setTests(List<Test> tests) {
-        this.tests = tests;
-    }
+//    public List<Test> getTests() {
+//        return tests;
+//    }
+//
+//    public void setTests(List<Test> tests) {
+//        this.tests = tests;
+//    }
 
     public Calendar getCreated() {
         return created;

@@ -1,6 +1,6 @@
 package br.edu.ufcg;
 
-import br.edu.ufcg.models.Solution;
+import br.edu.ufcg.models.Statistic;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import org.junit.Before;
@@ -11,15 +11,13 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.HashMap;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
 @SpringApplicationConfiguration(classes=Application.class)
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SolutionTest {
+public class StatisticTestSuite {
 
     @Value("${local.server.port}")
     private int port;
@@ -31,15 +29,26 @@ public class SolutionTest {
     }
 
     @Test
-    public void createSolution() throws Exception {
-        Solution solution = new Solution("Body");
+    public void getStatistic() throws Exception {
+        given()
+                .accept("application/json")
+        .when()
+                .port(this.port)
+                .get("/statistic")
+        .then().assertThat()
+                .statusCode(is(200));
+    }
+
+    @Test
+    public void updateStatistic() throws Exception {
+        Statistic statistic =  new Statistic(99, 25);
 
         given()
                 .contentType(ContentType.JSON)
-                .body(gson.toJson(solution))
+                .body(gson.toJson(statistic))
         .when()
                 .port(this.port)
-                .post("/solution")
+                .put("/statistic")
         .then().assertThat()
                 .statusCode(is(200));
     }

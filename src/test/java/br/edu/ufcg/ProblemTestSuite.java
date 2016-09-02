@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.*;
 @SpringApplicationConfiguration(classes=Application.class)
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ProblemTest {
+public class ProblemTestSuite {
     @Value("${local.server.port}")
     private int port;
     private Gson gson;
@@ -47,7 +47,7 @@ public class ProblemTest {
     public void setUp() throws Exception {
         gson = new Gson();
         user1 = new User("user1@mail.com", "123456", User.Class.NORMAL);
-        user2 = new User("user1@mail.com", "123456", User.Class.ADMIN);
+        user2 = new User("user2@mail.com", "123456", User.Class.ADMIN);
         problem1 = new Problem("name1", "desc1", "tip1");
         problem1.setOwner(user1);
         problem2 = new Problem("name2", "desc2", "tip2");
@@ -69,10 +69,10 @@ public class ProblemTest {
         given()
                 .contentType(ContentType.JSON)
                 .queryParam("user", user1.getId())
-                .when()
+        .when()
                 .port(this.port)
                 .get("/problem")
-                .then().assertThat()
+        .then().assertThat()
                 .statusCode(is(200))
                 .body("find{it.id=="+problem1.getId()+"}.name",equalTo("name1"))
                 .body("find{it.id=="+problem1.getId()+"}.desc",equalTo("desc1"))

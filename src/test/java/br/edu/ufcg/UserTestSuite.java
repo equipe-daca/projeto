@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.*;
 @SpringApplicationConfiguration(classes=Application.class)
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class UserTest {
+public class UserTestSuite {
 
     @Value("${local.server.port}")
     private int port;

@@ -21,8 +21,6 @@ public class Test implements Serializable {
     private boolean publicTest;
     @ManyToOne
     private Problem problem;
-    @ManyToOne
-    private Solution solution;
 
     public Test() {
     }
@@ -81,5 +79,13 @@ public class Test implements Serializable {
 
     public void setPublicTest(boolean publicTest) {
         this.publicTest = publicTest;
+    }
+
+    public Problem getProblem() {
+        return problem;
+    }
+
+    public void setProblem(Problem problem) {
+        this.problem = problem;
     }
 }
