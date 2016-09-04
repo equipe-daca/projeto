@@ -1,7 +1,7 @@
-package br.edu.ufcg.services;
+package br.edu.ufcg.service;
 
-import br.edu.ufcg.models.User;
-import br.edu.ufcg.repositories.UserRepository;
+import br.edu.ufcg.domain.User;
+import br.edu.ufcg.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

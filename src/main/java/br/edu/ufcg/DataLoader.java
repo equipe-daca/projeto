@@ -1,17 +1,11 @@
 package br.edu.ufcg;
 
-import br.edu.ufcg.models.Problem;
-import br.edu.ufcg.models.Test;
-import br.edu.ufcg.repositories.ProblemRepository;
+import br.edu.ufcg.domain.ProblemRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {

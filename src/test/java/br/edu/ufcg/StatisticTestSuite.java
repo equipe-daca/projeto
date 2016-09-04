@@ -1,6 +1,6 @@
 package br.edu.ufcg;
 
-import br.edu.ufcg.models.Statistic;
+import br.edu.ufcg.domain.Statistic;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import org.junit.Before;

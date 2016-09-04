@@ -1,8 +1,6 @@
-package br.edu.ufcg.repositories;
+package br.edu.ufcg.domain;
 
-import br.edu.ufcg.models.Problem;
-import br.edu.ufcg.models.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import br.edu.ufcg.domain.Problem;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

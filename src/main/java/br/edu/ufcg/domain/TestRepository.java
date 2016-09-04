@@ -1,7 +1,6 @@
-package br.edu.ufcg.repositories;
+package br.edu.ufcg.domain;
 
-import br.edu.ufcg.models.Problem;
-import br.edu.ufcg.models.Test;
+import br.edu.ufcg.domain.Test;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

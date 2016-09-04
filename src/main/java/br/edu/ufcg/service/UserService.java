@@ -1,6 +1,6 @@
-package br.edu.ufcg.services;
+package br.edu.ufcg.service;
 
-import br.edu.ufcg.models.User;
+import br.edu.ufcg.domain.User;
 
 import java.util.List;
 

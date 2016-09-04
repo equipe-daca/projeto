@@ -1,7 +1,7 @@
-package br.edu.ufcg.controllers;
+package br.edu.ufcg.web;
 
-import br.edu.ufcg.models.User;
-import br.edu.ufcg.services.UserService;
+import br.edu.ufcg.domain.User;
+import br.edu.ufcg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

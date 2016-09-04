@@ -1,7 +1,7 @@
-package br.edu.ufcg.controllers;
+package br.edu.ufcg.web;
 
-import br.edu.ufcg.models.Test;
-import br.edu.ufcg.services.TestService;
+import br.edu.ufcg.domain.Test;
+import br.edu.ufcg.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

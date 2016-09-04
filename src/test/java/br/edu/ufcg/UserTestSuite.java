@@ -1,7 +1,7 @@
 package br.edu.ufcg;
 
-import br.edu.ufcg.models.User;
-import br.edu.ufcg.repositories.UserRepository;
+import br.edu.ufcg.domain.User;
+import br.edu.ufcg.domain.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import org.junit.After;

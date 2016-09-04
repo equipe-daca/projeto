@@ -1,4 +1,4 @@
-package br.edu.ufcg.controllers;
+package br.edu.ufcg.web;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

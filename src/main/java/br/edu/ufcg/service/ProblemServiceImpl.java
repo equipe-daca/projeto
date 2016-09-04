@@ -1,7 +1,7 @@
-package br.edu.ufcg.services;
+package br.edu.ufcg.service;
 
-import br.edu.ufcg.models.Problem;
-import br.edu.ufcg.repositories.ProblemRepository;
+import br.edu.ufcg.domain.Problem;
+import br.edu.ufcg.domain.ProblemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

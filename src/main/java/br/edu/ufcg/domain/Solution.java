@@ -1,12 +1,8 @@
-package br.edu.ufcg.models;
-
-import com.google.common.collect.Lists;
+package br.edu.ufcg.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
 
 @Entity
 public class Solution implements Serializable {
@@ -22,15 +18,8 @@ public class Solution implements Serializable {
 //    private List<Test> tests;
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar created;
-    public Solution() {
-        this.created = Calendar.getInstance();
-//        this.tests = Lists.newArrayList();
-    }
 
-    public Solution(String body) {
-        this.body = body;
-        this.created = Calendar.getInstance();
-//        this.tests = Lists.newArrayList();
+    public Solution() {
     }
 
     public Long getId() {

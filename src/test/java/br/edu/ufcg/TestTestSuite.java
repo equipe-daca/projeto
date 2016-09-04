@@ -1,11 +1,11 @@
 package br.edu.ufcg;
 
-import br.edu.ufcg.models.Problem;
-import br.edu.ufcg.models.Test;
-import br.edu.ufcg.models.User;
-import br.edu.ufcg.repositories.ProblemRepository;
-import br.edu.ufcg.repositories.TestRepository;
-import br.edu.ufcg.repositories.UserRepository;
+import br.edu.ufcg.domain.Problem;
+import br.edu.ufcg.domain.Test;
+import br.edu.ufcg.domain.User;
+import br.edu.ufcg.domain.ProblemRepository;
+import br.edu.ufcg.domain.TestRepository;
+import br.edu.ufcg.domain.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import org.apache.log4j.Logger;
@@ -17,9 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasSize;

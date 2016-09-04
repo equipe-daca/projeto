@@ -1,6 +1,6 @@
-package br.edu.ufcg.controllers;
+package br.edu.ufcg.web;
 
-import br.edu.ufcg.models.Statistic;
+import br.edu.ufcg.domain.Statistic;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

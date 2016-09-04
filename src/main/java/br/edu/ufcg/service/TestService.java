@@ -1,6 +1,6 @@
-package br.edu.ufcg.services;
+package br.edu.ufcg.service;
 
-import br.edu.ufcg.models.Test;
+import br.edu.ufcg.domain.Test;
 
 import java.util.List;
 

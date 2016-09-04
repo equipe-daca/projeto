@@ -1,7 +1,6 @@
-package br.edu.ufcg.controllers;
+package br.edu.ufcg.web;
 
-import br.edu.ufcg.models.Solution;
-import br.edu.ufcg.models.Test;
+import br.edu.ufcg.domain.Solution;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

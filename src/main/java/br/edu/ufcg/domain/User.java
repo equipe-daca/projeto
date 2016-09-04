@@ -1,4 +1,4 @@
-package br.edu.ufcg.models;
+package br.edu.ufcg.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

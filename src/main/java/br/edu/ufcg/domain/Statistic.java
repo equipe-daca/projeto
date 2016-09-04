@@ -1,4 +1,4 @@
-package br.edu.ufcg.models;
+package br.edu.ufcg.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

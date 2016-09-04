@@ -1,4 +1,4 @@
-package br.edu.ufcg.models;
+package br.edu.ufcg.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,7 +30,6 @@ public class Test implements Serializable {
 
     public Test() {
     }
-
 
     public Long getId() {
         return id;
