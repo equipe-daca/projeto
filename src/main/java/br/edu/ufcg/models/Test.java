@@ -9,29 +9,28 @@ public class Test implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+
     @Column(nullable = false)
     private String name;
+
     @Column
     private String tip;
+
     @Column(nullable = false)
     private String input;
+
     @Column(nullable = false)
     private String output;
+
     @Column
     private boolean publicTest;
+
     @ManyToOne
     private Problem problem;
 
     public Test() {
     }
 
-    public Test(String name, String tip, String input, String output, boolean publicTest) {
-        this.name = name;
-        this.tip = tip;
-        this.input = input;
-        this.output = output;
-        this.publicTest = publicTest;
-    }
 
     public Long getId() {
         return id;

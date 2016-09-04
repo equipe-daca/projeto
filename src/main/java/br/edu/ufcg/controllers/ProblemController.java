@@ -14,7 +14,7 @@ import java.util.List;
 public class ProblemController {
 
     @Autowired
-    ProblemService service;
+    ProblemService problemService;
 
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity< List<Problem>> getProblems(
@@ -22,15 +22,11 @@ public class ProblemController {
 
         List<Problem> problems;
 
-        System.out.println("USER: " + user);
-
         if(user == null){
-            problems = service.findAll();
+            problems = problemService.findAll();
         }else{
-            problems = service.findByOwnerId(user);
+            problems = problemService.findByOwnerId(user);
         }
-
-        System.out.println("USER: " + problems);
 
         return new ResponseEntity<>(problems, HttpStatus.OK);
     }
@@ -38,29 +34,33 @@ public class ProblemController {
     @RequestMapping(value="/{problemCode}", method=RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Problem> getProblem(@PathVariable Long problemCode){
-        Problem  problem = service.getProblem(problemCode);
+        Problem  problem = problemService.getProblem(problemCode);
         return new ResponseEntity<>(problem, HttpStatus.OK);
     }
 
     @RequestMapping(method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Problem> createProblem(@RequestBody Problem problem){
-        Problem p = service.createProblem(problem);
+        Problem p = problemService.createProblem(problem);
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{problemCode}", method=RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<Problem> updateProblem(@PathVariable Long problemCode, @RequestBody Problem problem){
-        Problem p = service.updateProblem(problemCode, problem);
+        Problem p = problemService.updateProblem(problemCode, problem);
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{problemCode}", method=RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<Problem> deleteProblem(@PathVariable Long problemCode){
-        if(service.exists(problemCode)){
-            service.delete(problemCode);
+
+        System.out.println("PC: "+problemCode);
+        System.out.println("EX: "+ problemService.exists(problemCode));
+
+        if(problemService.exists(problemCode)){
+            problemService.delete(problemCode);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

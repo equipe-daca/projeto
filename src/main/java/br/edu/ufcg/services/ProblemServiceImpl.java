@@ -46,9 +46,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public void delete(Long id) {
-        if(problemRepository.exists(id)){
-            problemRepository.delete(id);
-        }
+        problemRepository.delete(id);
     }
 
     @Override

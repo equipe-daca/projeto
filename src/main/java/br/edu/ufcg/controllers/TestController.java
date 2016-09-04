@@ -27,7 +27,7 @@ public class TestController {
     @RequestMapping(value="/{testCode}", method=RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Test> getTest(@PathVariable Long problemCode, @PathVariable Long testCode) {
-        Test test = new Test("Nome", "Dica", "in", "out", true);
+        Test test = new Test();
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 

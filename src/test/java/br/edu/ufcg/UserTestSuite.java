@@ -36,8 +36,16 @@ public class UserTestSuite {
     @Before
     public void setUp() throws Exception {
         gson = new Gson();
-        user1 = new User("user1@mail.com", "123456", User.Class.NORMAL);
-        user2 = new User("user2@mail.com", "123456", User.Class.ADMIN);
+
+        user1 = new User();
+        user1.setEmail("user1@mail.com");
+        user1.setPassword("123456");
+        user1.setUserClass(User.Class.NORMAL);
+
+        user2 = new User();
+        user2.setEmail("user2@mail.com");
+        user2.setPassword("123456");
+        user2.setUserClass(User.Class.ADMIN);
     }
 
     @After
@@ -202,7 +210,7 @@ public class UserTestSuite {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", 1)
+                .pathParam("code", user1.getId())
         .when()
                 .port(this.port)
                 .delete("/user/{code}")

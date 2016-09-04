@@ -16,8 +16,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -30,28 +28,35 @@ public class ProblemTestSuite {
     private Gson gson;
     private ProblemRepository problemRepository;
     private UserRepository userRepository;
-    private User user1, user2;
-    private Problem problem1, problem2;
-
-    @Autowired
-    public void setProductRepository(ProblemRepository problemRepo) {
-        this.problemRepository = problemRepo;
-    }
+    private User user1;
+    private Problem problem1;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    @Autowired
+    public void setProblemRepository(ProblemRepository problemRepository) {
+        this.problemRepository = problemRepository;
+    }
+
     @Before
     public void setUp() throws Exception {
+
         gson = new Gson();
-        user1 = new User("user1@mail.com", "123456", User.Class.NORMAL);
-        user2 = new User("user2@mail.com", "123456", User.Class.ADMIN);
-        problem1 = new Problem("name1", "desc1", "tip1");
+
+        user1 = new User();
+        user1.setEmail("user1@mail.com");
+        user1.setPassword("123456");
+        user1.setUserClass(User.Class.NORMAL);
+
+        problem1 = new Problem();
+        problem1.setName("name1");
+        problem1.setDesc("desc1");
+        problem1.setTip("tip1");
         problem1.setOwner(user1);
-        problem2 = new Problem("name2", "desc2", "tip2");
-        problem2.setOwner(user2);
+
     }
 
     @After
@@ -99,8 +104,7 @@ public class ProblemTestSuite {
                 .body("name", equalTo("name1"))
                 .body("desc", equalTo("desc1"))
                 .body("tip", equalTo("tip1"))
-                .body("owner.id", equalTo(user1.getId().intValue()))
-                .body("tests", empty());
+                .body("owner.id", equalTo(user1.getId().intValue()));
     }
 
     @Test
@@ -120,8 +124,7 @@ public class ProblemTestSuite {
                 .body("name", equalTo("name1"))
                 .body("desc", equalTo("desc1"))
                 .body("tip", equalTo("tip1"))
-                .body("owner.id", equalTo(user1.getId().intValue()))
-                .body("tests", empty());
+                .body("owner.id", equalTo(user1.getId().intValue()));
     }
 
     @Test
@@ -155,15 +158,28 @@ public class ProblemTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", problem1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .delete("/problem/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200));
 
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", problem1.getId())
+                .when()
+                .port(this.port)
+                .delete("/problem/{code}")
+                .then().assertThat()
+                .statusCode(is(404));
+    }
+
+    @Test
+    public void deleteInexistentProblem() throws Exception {
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("code", 1)
         .when()
                 .port(this.port)
                 .delete("/problem/{code}")

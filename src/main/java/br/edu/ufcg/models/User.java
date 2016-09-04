@@ -1,12 +1,10 @@
 package br.edu.ufcg.models;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 public class User implements Serializable{
@@ -18,28 +16,25 @@ public class User implements Serializable{
     @Id
     @GeneratedValue
     private Long id;
+
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String password;
+
     @Enumerated(EnumType.STRING)
     private Class userClass;
-    @OneToMany(fetch=FetchType.EAGER)
-    @MapKeyClass(Solution.class)
-    private Map<Solution, Problem> solutions;
-    @OneToMany(mappedBy = "owner", fetch=FetchType.EAGER)
-    private List<Problem> problems;
 
-    public User() {
-        this.solutions = new HashMap<>();
-    }
+//    @OneToMany(fetch=FetchType.EAGER)
+//    @MapKeyClass(Solution.class)
+//    private Map<Solution, Problem> solutions;
 
-    public User(String email, String password, Class userClass) {
-        this.email = email;
-        this.password = password;
-        this.userClass = userClass;
-        this.solutions = new HashMap<>();
-    }
+    @OneToMany(mappedBy = "owner", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Problem> problems;
+
+    public User() {}
 
     public Long getId() {
         return id;
@@ -73,12 +68,11 @@ public class User implements Serializable{
         this.userClass = userClass;
     }
 
-    public Map<Solution, Problem> getSolutions() {
-        return solutions;
+    public Set<Problem> getProblems() {
+        return problems;
     }
 
-    public void setSolutions(Map<Solution, Problem> solutions) {
-        this.solutions = solutions;
+    public void setProblems(Set<Problem> problems) {
+        this.problems = problems;
     }
-
 }
