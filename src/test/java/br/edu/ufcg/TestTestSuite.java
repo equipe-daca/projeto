@@ -100,6 +100,7 @@ public class TestTestSuite {
         userRepository.save(user1);
         problemRepository.save(problem1);
         testRepository.save(test1);
+        testRepository.save(test2);
 
         given()
                 .contentType(ContentType.JSON)
@@ -109,11 +110,199 @@ public class TestTestSuite {
                 .get("/problem/{problemId}/test")
         .then().assertThat()
                 .statusCode(is(200))
+                .body("", hasSize(2))
                 .body("find{it.id=="+test1.getId()+"}.name",equalTo("test1"))
                 .body("find{it.id=="+test1.getId()+"}.input",equalTo("input1"))
                 .body("find{it.id=="+test1.getId()+"}.output",equalTo("output1"))
                 .body("find{it.id=="+test1.getId()+"}.tip",equalTo("tip1"))
                 .body("find{it.id=="+test1.getId()+"}.publicTest",equalTo(true))
-                .body("", hasSize(1));
+                .body("find{it.id=="+test2.getId()+"}.name",equalTo("test2"))
+                .body("find{it.id=="+test2.getId()+"}.input",equalTo("input2"))
+                .body("find{it.id=="+test2.getId()+"}.output",equalTo("output2"))
+                .body("find{it.id=="+test2.getId()+"}.tip",equalTo("tip2"))
+                .body("find{it.id=="+test2.getId()+"}.publicTest",equalTo(false));
+
+    }
+
+    @org.junit.Test
+    public void getSpecificTest() throws Exception {
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+        testRepository.save(test1);
+        testRepository.save(test2);
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("problemId", problem1.getId())
+                .pathParam("testId", test1.getId())
+        .when()
+                .port(this.port)
+                .get("/problem/{problemId}/test/{testId}")
+        .then().assertThat()
+                .statusCode(is(200))
+                .body("id" ,equalTo(test1.getId().intValue()))
+                .body("name" ,equalTo("test1"))
+                .body("tip" ,equalTo("tip1"))
+                .body("input" ,equalTo("input1"))
+                .body("output" ,equalTo("output1"))
+                .body("publicTest" ,equalTo(true));
+    }
+
+    @org.junit.Test
+    public void getSpecificTestWithInvalidTestId() throws Exception {
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+        testRepository.save(test1);
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("problemId", problem1.getId())
+                .pathParam("testId", 999)
+        .when()
+                .port(this.port)
+                .get("/problem/{problemId}/test/{testId}")
+        .then().assertThat()
+                .statusCode(is(404));
+    }
+
+    @org.junit.Test
+    public void getSpecificTestWithInvalidProblemId() throws Exception {
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+        testRepository.save(test1);
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("problemId", 999)
+                .pathParam("testId", test1.getId())
+        .when()
+                .port(this.port)
+                .get("/problem/{problemId}/test/{testId}")
+        .then().assertThat()
+                .statusCode(is(404));
+    }
+
+    @org.junit.Test
+    public void removeNonexistentTest() throws Exception {
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+        testRepository.save(test1);
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("problemId", problem1.getId())
+                .pathParam("testId", 999)
+        .when()
+                .port(this.port)
+                .delete("/problem/{problemId}/test/{testId}")
+        .then().assertThat()
+                .statusCode(is(404));
+    }
+
+    @org.junit.Test
+    public void removeTestFromNonexistentProblem() throws Exception {
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+        testRepository.save(test1);
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("problemId", 999)
+                .pathParam("testId", test1.getId())
+                .when()
+                .port(this.port)
+                .delete("/problem/{problemId}/test/{testId}")
+                .then().assertThat()
+                .statusCode(is(404));
+    }
+
+    @org.junit.Test
+    public void removeExistentTest() throws Exception {
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+        testRepository.save(test1);
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("problemId", problem1.getId())
+                .pathParam("testId", test1.getId())
+                .when()
+                .port(this.port)
+                .delete("/problem/{problemId}/test/{testId}")
+                .then().assertThat()
+                .statusCode(is(200));
+    }
+
+    @org.junit.Test
+    public void update() throws Exception {
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+        testRepository.save(test1);
+
+        test1.setName("test2");
+        test1.setTip("tip2");
+        test1.setInput("input2");
+        test1.setOutput("output2");
+        test1.setPublicTest(false);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(gson.toJson(test1))
+                .pathParam("problemId", problem1.getId())
+                .pathParam("testId", test1.getId())
+        .when()
+                .port(this.port)
+                .put("/problem/{problemId}/test/{testId}")
+        .then().assertThat()
+                .statusCode(is(200))
+                .body("id", equalTo(test1.getId().intValue()))
+                .body("name" ,equalTo("test2"))
+                .body("tip" ,equalTo("tip2"))
+                .body("input" ,equalTo("input2"))
+                .body("output" ,equalTo("output2"))
+                .body("publicTest" ,equalTo(false));
+    }
+
+    @org.junit.Test
+    public void save() throws Exception {
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(gson.toJson(test1))
+                .pathParam("problemId", problem1.getId())
+        .when()
+                .port(this.port)
+                .post("/problem/{problemId}/test")
+        .then().assertThat()
+                .statusCode(is(201))
+                .body("name" ,equalTo("test1"))
+                .body("tip" ,equalTo("tip1"))
+                .body("input" ,equalTo("input1"))
+                .body("output" ,equalTo("output1"))
+                .body("publicTest" ,equalTo(true));
+    }
+
+    @org.junit.Test
+    public void saveTestWithNonexistentProblem() throws Exception {
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(gson.toJson(test1))
+                .pathParam("problemId", 999)
+        .when()
+                .port(this.port)
+                .post("/problem/{problemId}/test")
+        .then().assertThat()
+                .statusCode(is(400));
     }
 }
