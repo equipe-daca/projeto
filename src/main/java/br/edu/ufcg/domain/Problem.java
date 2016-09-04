@@ -79,4 +79,12 @@ public class Problem implements Serializable {
     public void setTests(Set<Test> tests) {
         this.tests = tests;
     }
+
+    public void update(Problem p){
+        this.setName(p.getName());
+        this.setTip(p.getTip());
+        this.setDesc(p.getDesc());
+        this.setOwner(p.getOwner());
+        this.setTests(p.getTests());
+    }
 }

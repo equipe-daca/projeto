@@ -26,14 +26,6 @@ public class User implements Serializable{
     @Enumerated(EnumType.STRING)
     private Class userClass;
 
-//    @OneToMany(fetch=FetchType.EAGER)
-//    @MapKeyClass(Solution.class)
-//    private Map<Solution, Problem> solutions;
-
-    @OneToMany(mappedBy = "owner", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Problem> problems;
-
     public User() {}
 
     public Long getId() {
@@ -68,11 +60,10 @@ public class User implements Serializable{
         this.userClass = userClass;
     }
 
-    public Set<Problem> getProblems() {
-        return problems;
-    }
 
-    public void setProblems(Set<Problem> problems) {
-        this.problems = problems;
+    public void update(User user){
+        this.setEmail(user.getEmail());
+        this.setPassword(user.getPassword());
+        this.setUserClass(user.getUserClass());
     }
 }

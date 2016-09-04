@@ -1,8 +1,8 @@
 package br.edu.ufcg;
 
 import br.edu.ufcg.domain.Problem;
-import br.edu.ufcg.domain.User;
 import br.edu.ufcg.domain.ProblemRepository;
+import br.edu.ufcg.domain.User;
 import br.edu.ufcg.domain.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
@@ -158,10 +158,10 @@ public class ProblemTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", problem1.getId())
-                .when()
+        .when()
                 .port(this.port)
                 .delete("/problem/{code}")
-                .then().assertThat()
+        .then().assertThat()
                 .statusCode(is(200));
 
         given()

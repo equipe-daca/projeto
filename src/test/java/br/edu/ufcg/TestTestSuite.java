@@ -237,6 +237,7 @@ public class TestTestSuite {
                 .delete("/problem/{problemId}/test/{testId}")
                 .then().assertThat()
                 .statusCode(is(200));
+
     }
 
     @org.junit.Test

@@ -55,13 +55,10 @@ public class ProblemController {
     @RequestMapping(value="/{problemCode}", method=RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<Problem> deleteProblem(@PathVariable Long problemCode){
-
-        System.out.println("PC: "+problemCode);
-        System.out.println("EX: "+ problemService.exists(problemCode));
-
         if(problemService.exists(problemCode)){
             problemService.delete(problemCode);
             return new ResponseEntity<>(HttpStatus.OK);
+
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

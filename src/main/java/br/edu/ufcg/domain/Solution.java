@@ -1,8 +1,11 @@
 package br.edu.ufcg.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Set;
 
 @Entity
 public class Solution implements Serializable {
@@ -13,11 +16,15 @@ public class Solution implements Serializable {
 
     @Column
     private String body;
-//    @OneToMany(mappedBy = "solution")
-//    @OrderColumn
-//    private List<Test> tests;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar created;
+
+    @ElementCollection
+    private Set<Response> responses;
+
+    @ManyToOne
+    private User owner;
+
+    @ManyToOne
+    private Problem problem;
 
     public Solution() {
     }
@@ -38,19 +45,27 @@ public class Solution implements Serializable {
         this.body = body;
     }
 
-//    public List<Test> getTests() {
-//        return tests;
-//    }
-//
-//    public void setTests(List<Test> tests) {
-//        this.tests = tests;
-//    }
-
-    public Calendar getCreated() {
-        return created;
+    public Set<Response> getResponses() {
+        return responses;
     }
 
-    public void setCreated(Calendar created) {
-        this.created = created;
+    public void setResponses(Set<Response> responses) {
+        this.responses = responses;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public Problem getProblem() {
+        return problem;
+    }
+
+    public void setProblem(Problem problem) {
+        this.problem = problem;
     }
 }
