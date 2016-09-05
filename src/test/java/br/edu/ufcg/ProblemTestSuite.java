@@ -5,6 +5,7 @@ import br.edu.ufcg.domain.ProblemRepository;
 import br.edu.ufcg.domain.User;
 import br.edu.ufcg.domain.UserRepository;
 import com.google.gson.Gson;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -44,12 +46,16 @@ public class ProblemTestSuite {
     @Before
     public void setUp() throws Exception {
 
+        RestAssured.authentication = basic("admin@mail.com","123456");
+
         gson = new Gson();
 
         user1 = new User();
         user1.setEmail("user1@mail.com");
         user1.setPassword("123456");
         user1.setUserClass(User.Class.NORMAL);
+
+        userRepository.save(user1);
 
         problem1 = new Problem();
         problem1.setName("name1");
@@ -62,13 +68,11 @@ public class ProblemTestSuite {
     @After
     public void tearDown() throws Exception {
         problemRepository.deleteAll();
-        userRepository.deleteAll();
     }
 
     @Test
     public void getProblems() throws Exception {
 
-        userRepository.save(user1);
         problemRepository.save(problem1);
 
         given()
@@ -88,7 +92,6 @@ public class ProblemTestSuite {
     @Test
     public void getProblem() throws Exception {
 
-        userRepository.save(user1);
         problemRepository.save(problem1);
 
         given()
@@ -110,8 +113,6 @@ public class ProblemTestSuite {
     @Test
     public void createProblem() throws Exception {
 
-        userRepository.save(user1);
-
         given()
                 .contentType(ContentType.JSON)
                 .body(gson.toJson(problem1))
@@ -130,8 +131,8 @@ public class ProblemTestSuite {
     @Test
     public void updateProblem() throws Exception {
 
-        userRepository.save(user1);
         problemRepository.save(problem1);
+
         problem1.setName("name2");
 
         given()
@@ -152,7 +153,6 @@ public class ProblemTestSuite {
     @Test
     public void deleteProblem() throws Exception {
 
-        userRepository.save(user1);
         problemRepository.save(problem1);
 
         given()

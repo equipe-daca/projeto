@@ -1,23 +1,20 @@
 package br.edu.ufcg.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
 
 @Entity
 public class User implements Serializable{
 
     public enum Class {
-        NORMAL, ADMIN;
+        NORMAL, ADMIN
     }
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)

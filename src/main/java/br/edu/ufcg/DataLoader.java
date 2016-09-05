@@ -1,7 +1,9 @@
 package br.edu.ufcg;
 
+import br.edu.ufcg.domain.Problem;
 import br.edu.ufcg.domain.ProblemRepository;
-import org.apache.log4j.Logger;
+import br.edu.ufcg.domain.User;
+import br.edu.ufcg.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -10,23 +12,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    private ProblemRepository problemRepo;
-
-    private Logger log = Logger.getLogger(DataLoader.class);
+    private UserRepository userRepository;
 
     @Autowired
-    public void setProductRepository(ProblemRepository problemRepo) {
-        this.problemRepo = problemRepo;
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-//        for(int i = 1; i <= 5; i++){
-//            Problem problem = new Problem();
-//            problem.setName("name" + i);
-//            problem.setDesc("desc" + i);
-//            problem.setTip("tip" + i);
-//            problemRepo.save(problem);
-//        }
+
+        User admin = new User();
+        admin.setEmail("admin@mail.com");
+        admin.setPassword("123456");
+        admin.setUserClass(User.Class.ADMIN);
+
+        userRepository.save(admin);
     }
 }

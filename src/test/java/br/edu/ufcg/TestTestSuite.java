@@ -1,11 +1,6 @@
 package br.edu.ufcg;
 
-import br.edu.ufcg.domain.Problem;
-import br.edu.ufcg.domain.Test;
-import br.edu.ufcg.domain.User;
-import br.edu.ufcg.domain.ProblemRepository;
-import br.edu.ufcg.domain.TestRepository;
-import br.edu.ufcg.domain.UserRepository;
+import br.edu.ufcg.domain.*;
 import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import org.apache.log4j.Logger;

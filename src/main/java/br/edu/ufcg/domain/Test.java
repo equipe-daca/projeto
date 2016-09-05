@@ -1,5 +1,7 @@
 package br.edu.ufcg.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -26,6 +28,7 @@ public class Test implements Serializable {
     private boolean publicTest;
 
     @ManyToOne
+    @JsonIgnore
     private Problem problem;
 
     public Test() {

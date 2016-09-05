@@ -1,6 +1,5 @@
 package br.edu.ufcg.domain;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

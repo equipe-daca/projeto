@@ -3,6 +3,8 @@ package br.edu.ufcg;
 import br.edu.ufcg.domain.User;
 import br.edu.ufcg.domain.UserRepository;
 import com.google.gson.Gson;
+import io.restassured.RestAssured;
+import io.restassured.authentication.FormAuthConfig;
 import io.restassured.http.ContentType;
 import org.junit.After;
 import org.junit.Before;
@@ -26,7 +28,7 @@ public class UserTestSuite {
     private int port;
     private Gson gson;
     private UserRepository userRepository;
-    private User user1, user2;
+    private User user1, user2, user3;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -35,6 +37,9 @@ public class UserTestSuite {
 
     @Before
     public void setUp() throws Exception {
+
+        RestAssured.authentication = basic("admin@mail.com","123456");
+
         gson = new Gson();
 
         user1 = new User();
@@ -46,16 +51,42 @@ public class UserTestSuite {
         user2.setEmail("user2@mail.com");
         user2.setPassword("123456");
         user2.setUserClass(User.Class.ADMIN);
+
+        user3 = new User();
+        user3.setEmail("user3@mail.com");
+        user3.setPassword("123456");
+        user3.setUserClass(User.Class.ADMIN);
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+
     }
 
     @After
     public void tearDown() throws Exception {
-        userRepository.deleteAll();
+        userRepository.delete(user1);
+        userRepository.delete(user2);
+    }
+
+    @Test
+    public void getUserListWithElements() throws Exception {
+
+        given()
+                .contentType(ContentType.JSON)
+        .when()
+                .port(this.port)
+                .get("/user")
+        .then().assertThat()
+                .body("", hasSize(3))
+                .statusCode(is(200));
+
     }
 
     @Test
     public void getUserListWithOneElement() throws Exception {
-        userRepository.save(user1);
+
+        userRepository.delete(user1);
+        userRepository.delete(user2);
 
         given()
                 .contentType(ContentType.JSON)
@@ -68,36 +99,8 @@ public class UserTestSuite {
     }
 
     @Test
-    public void getUserListWithTwoElements() throws Exception {
-
-        userRepository.save(user1);
-        userRepository.save(user2);
-
-        given()
-                .contentType(ContentType.JSON)
-        .when()
-                .port(this.port)
-                .get("/user")
-        .then().assertThat()
-                .body("", hasSize(2))
-                .statusCode(is(200));
-    }
-
-    @Test
-    public void getUserListWithZeroElements() throws Exception {
-
-        given()
-                .contentType(ContentType.JSON)
-        .when()
-                .port(this.port)
-                .get("/user")
-        .then().assertThat()
-                .body("", is(empty()))
-                .statusCode(is(200));
-    }
-
-    @Test
     public void getUserWithValidId() throws Exception {
+
         userRepository.save(user1);
 
         given()
@@ -135,7 +138,7 @@ public class UserTestSuite {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", 1)
+                .pathParam("code", 999)
         .when()
                 .port(this.port)
                 .get("/user/{code}")
@@ -185,7 +188,7 @@ public class UserTestSuite {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", 1)
+                .pathParam("code", 999)
         .when()
                 .port(this.port)
                 .delete("/user/{code}")

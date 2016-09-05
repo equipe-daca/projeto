@@ -21,4 +21,8 @@ public class SolutionService {
     public List<Solution> findByProblemIdOrOwnerId(Long problemId, Long ownerId){
         return solutionRepository.findByProblemIdOrOwnerId(problemId, ownerId);
     }
+
+    public List<Solution> findAll(){
+        return solutionRepository.findAll();
+    }
 }

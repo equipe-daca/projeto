@@ -1,7 +1,5 @@
 package br.edu.ufcg.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -23,11 +21,11 @@ public class Problem implements Serializable {
     private String tip;
 
     @OneToMany(mappedBy = "problem", fetch=FetchType.EAGER, cascade = CascadeType.ALL) //, orphanRemoval = true
-    @JsonIgnore
     private Set<Test> tests;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     private User owner;
+
 
     public Problem() {
     }
@@ -87,4 +85,9 @@ public class Problem implements Serializable {
         this.setOwner(p.getOwner());
         this.setTests(p.getTests());
     }
+
+//    @PrePersist
+//    void onPrePersist() {
+//        created = LocalDate.now();
+//    }
 }

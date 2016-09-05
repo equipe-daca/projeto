@@ -7,12 +7,31 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/solution", produces="application/json")
 public class SolutionController {
 
     @Autowired
     SolutionService solutionService;
+
+    @RequestMapping(method= RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<List<Solution>> getSolutions(
+            @RequestParam(value = "user", required = false) Long user,
+            @RequestParam(value = "problem", required = false) Long problem){
+
+        List<Solution> solutions = null;
+
+        if(user != null || problem != null){
+            solutions = solutionService.findByProblemIdOrOwnerId(problem, user);
+        }else{
+            solutions = solutionService.findAll();
+        }
+
+        return new ResponseEntity<>(solutions, HttpStatus.OK);
+    }
 
     @RequestMapping(method= RequestMethod.POST)
     @ResponseBody
@@ -25,4 +44,6 @@ public class SolutionController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+
 }
