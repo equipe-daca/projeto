@@ -21,12 +21,5 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-
-        User admin = new User();
-        admin.setEmail("admin@mail.com");
-        admin.setPassword("123456");
-        admin.setUserClass(User.Class.ADMIN);
-
-        userRepository.save(admin);
     }
 }

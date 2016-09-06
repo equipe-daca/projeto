@@ -46,7 +46,14 @@ public class ProblemTestSuite {
     @Before
     public void setUp() throws Exception {
 
-        RestAssured.authentication = basic("admin@mail.com","123456");
+        User admin = new User();
+        admin.setEmail("admin@mail.com");
+        admin.setPassword("123456");
+        admin.setUserClass(User.Class.ADMIN);
+
+        userRepository.save(admin);
+
+        RestAssured.authentication = basic(admin.getEmail(), admin.getPassword());
 
         gson = new Gson();
 
@@ -62,12 +69,12 @@ public class ProblemTestSuite {
         problem1.setDesc("desc1");
         problem1.setTip("tip1");
         problem1.setOwner(user1);
-
     }
 
     @After
     public void tearDown() throws Exception {
         problemRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test

@@ -36,8 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("user").password("password").roles("USER");
+        /*auth.inMemoryAuthentication()
+                .withUser("user").password("password").roles("USER");*/
         auth.userDetailsService(userDetailsService());
 	}
 
@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 br.edu.ufcg.domain.User user = userRepository.findByEmail(email);
 				if (user != null) {
 					return new User(user.getEmail(), user.getPassword(), true, true, true, true,
-							AuthorityUtils.createAuthorityList("USER"));
+							AuthorityUtils.createAuthorityList(user.getUserClass().toString()));
 				} else {
 					throw new UsernameNotFoundException("could not find the user '" + user.getEmail() + "'");
 				}

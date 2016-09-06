@@ -23,7 +23,7 @@ public class Problem implements Serializable {
     @OneToMany(mappedBy = "problem", fetch=FetchType.EAGER, cascade = CascadeType.ALL) //, orphanRemoval = true
     private Set<Test> tests;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne
     private User owner;
 
 
@@ -86,8 +86,13 @@ public class Problem implements Serializable {
         this.setTests(p.getTests());
     }
 
-//    @PrePersist
-//    void onPrePersist() {
-//        created = LocalDate.now();
-//    }
+    /*@PrePersist
+    void onPrePersist() {
+        created = LocalDate.now();
+    }*/
+
+
+    class ProblemDTO{
+
+    }
 }

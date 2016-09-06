@@ -38,7 +38,14 @@ public class UserTestSuite {
     @Before
     public void setUp() throws Exception {
 
-        RestAssured.authentication = basic("admin@mail.com","123456");
+        User admin = new User();
+        admin.setEmail("admin@mail.com");
+        admin.setPassword("123456");
+        admin.setUserClass(User.Class.ADMIN);
+
+        userRepository.save(admin);
+
+        RestAssured.authentication = basic(admin.getEmail(), admin.getPassword());
 
         gson = new Gson();
 
@@ -52,11 +59,6 @@ public class UserTestSuite {
         user2.setPassword("123456");
         user2.setUserClass(User.Class.ADMIN);
 
-        user3 = new User();
-        user3.setEmail("user3@mail.com");
-        user3.setPassword("123456");
-        user3.setUserClass(User.Class.ADMIN);
-
         userRepository.save(user1);
         userRepository.save(user2);
 
@@ -64,8 +66,7 @@ public class UserTestSuite {
 
     @After
     public void tearDown() throws Exception {
-        userRepository.delete(user1);
-        userRepository.delete(user2);
+        userRepository.deleteAll();
     }
 
     @Test

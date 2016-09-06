@@ -2,6 +2,7 @@ package br.edu.ufcg;
 
 import br.edu.ufcg.domain.*;
 import com.google.gson.Gson;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.After;
 import org.junit.Before;
@@ -17,6 +18,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -55,6 +57,15 @@ public class SolutionTestSuite {
     @Before
     public void setUp() throws Exception {
         gson = new Gson();
+
+        User admin = new User();
+        admin.setEmail("admin@mail.com");
+        admin.setPassword("123456");
+        admin.setUserClass(User.Class.ADMIN);
+
+        userRepository.save(admin);
+
+        RestAssured.authentication = basic(admin.getEmail(), admin.getPassword());
 
         user1 = new User();
         user1.setEmail("user1@mail.com");

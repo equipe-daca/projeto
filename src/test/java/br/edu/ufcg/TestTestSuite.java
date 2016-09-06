@@ -2,7 +2,9 @@ package br.edu.ufcg;
 
 import br.edu.ufcg.domain.*;
 import com.google.gson.Gson;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -11,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -51,6 +55,15 @@ public class TestTestSuite {
 
     @Before
     public void setUp() throws Exception {
+
+        User admin = new User();
+        admin.setEmail("admin@mail.com");
+        admin.setPassword("123456");
+        admin.setUserClass(User.Class.ADMIN);
+
+        userRepository.save(admin);
+
+        RestAssured.authentication = basic(admin.getEmail(), admin.getPassword());
 
         gson = new Gson();
 
@@ -217,7 +230,7 @@ public class TestTestSuite {
     }
 
     @org.junit.Test
-    public void removeExistentTest() throws Exception {
+    public void removeTestFromExistentProbem() throws Exception {
 
         userRepository.save(user1);
         problemRepository.save(problem1);
@@ -236,7 +249,7 @@ public class TestTestSuite {
     }
 
     @org.junit.Test
-    public void update() throws Exception {
+    public void updateProblem() throws Exception {
 
         userRepository.save(user1);
         problemRepository.save(problem1);
@@ -267,7 +280,32 @@ public class TestTestSuite {
     }
 
     @org.junit.Test
-    public void save() throws Exception {
+    public void updateNonexistentTest() throws Exception {
+
+        userRepository.save(user1);
+        problemRepository.save(problem1);
+        testRepository.save(test1);
+
+        test1.setName("test2");
+        test1.setTip("tip2");
+        test1.setInput("input2");
+        test1.setOutput("output2");
+        test1.setPublicTest(false);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(gson.toJson(test1))
+                .pathParam("problemId", problem1.getId())
+                .pathParam("testId", 999)
+        .when()
+                .port(this.port)
+                .put("/problem/{problemId}/test/{testId}")
+                .then().assertThat()
+                .statusCode(HttpStatus.SC_NOT_FOUND);
+    }
+
+    @org.junit.Test
+    public void saveTest() throws Exception {
 
         userRepository.save(user1);
         problemRepository.save(problem1);
@@ -280,7 +318,7 @@ public class TestTestSuite {
                 .port(this.port)
                 .post("/problem/{problemId}/test")
         .then().assertThat()
-                .statusCode(is(201))
+                .statusCode(HttpStatus.SC_CREATED)
                 .body("name" ,equalTo("test1"))
                 .body("tip" ,equalTo("tip1"))
                 .body("input" ,equalTo("input1"))
@@ -299,6 +337,6 @@ public class TestTestSuite {
                 .port(this.port)
                 .post("/problem/{problemId}/test")
         .then().assertThat()
-                .statusCode(is(400));
+                .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 }
