@@ -1,6 +1,6 @@
 package br.edu.ufcg.domain;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable

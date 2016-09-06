@@ -1,7 +1,5 @@
 package br.edu.ufcg;
 
-import br.edu.ufcg.domain.Problem;
-import br.edu.ufcg.domain.ProblemRepository;
 import br.edu.ufcg.domain.User;
 import br.edu.ufcg.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +19,11 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+
+        User daca = new User();
+        daca.setEmail("daca@mail.com");
+        daca.setPassword("daca");
+        daca.setUserClass(User.Class.ADMIN);
+        userRepository.save(daca);
     }
 }

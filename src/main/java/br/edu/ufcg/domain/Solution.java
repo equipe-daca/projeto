@@ -1,13 +1,7 @@
 package br.edu.ufcg.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Set;
 
 @Entity
