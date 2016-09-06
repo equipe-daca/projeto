@@ -1,12 +1,13 @@
 package br.edu.ufcg;
 
+import br.edu.ufcg.domain.Problem;
+import br.edu.ufcg.domain.ProblemRepository;
 import br.edu.ufcg.domain.User;
 import br.edu.ufcg.domain.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,182 +24,171 @@ import static org.hamcrest.Matchers.*;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AdminUserTestSuite {
-
+public class AdminProblemTest {
     @Value("${local.server.port}")
     private int port;
     private Gson gson;
+    private ProblemRepository problemRepository;
     private UserRepository userRepository;
-    private User user1, user2, admin;
+    private User user1, admin;
+    private Problem problem1;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    @Autowired
+    public void setProblemRepository(ProblemRepository problemRepository) {
+        this.problemRepository = problemRepository;
+    }
+
     @Before
     public void setUp() throws Exception {
-        gson = new Gson();
 
         admin = new User();
         admin.setEmail("admin@mail.com");
         admin.setPassword("123456");
         admin.setUserClass(User.Class.ADMIN);
 
+        gson = new Gson();
+
         user1 = new User();
         user1.setEmail("user1@mail.com");
         user1.setPassword("123456");
         user1.setUserClass(User.Class.NORMAL);
 
-        user2 = new User();
-        user2.setEmail("user2@mail.com");
-        user2.setPassword("123456");
-        user2.setUserClass(User.Class.ADMIN);
+        problem1 = new Problem();
+        problem1.setName("name1");
+        problem1.setDesc("desc1");
+        problem1.setTip("tip1");
+        problem1.setOwner(user1);
 
-        userRepository.save(user1);
-        userRepository.save(user2);
         userRepository.save(admin);
+        userRepository.save(user1);
+
+        problemRepository.save(problem1);
 
         RestAssured.authentication = basic(admin.getEmail(), admin.getPassword());
     }
 
     @After
     public void tearDown() throws Exception {
+        problemRepository.deleteAll();
         userRepository.deleteAll();
     }
 
     @Test
-    public void getUserListWithElements() throws Exception {
-
-        Assert.assertEquals(3, userRepository.count());
+    public void getProblems() throws Exception {
 
         given()
                 .contentType(ContentType.JSON)
+                .queryParam("user", user1.getId())
                 .when()
                 .port(this.port)
-                .get("/user")
+                .get("/problem")
                 .then().assertThat()
-                .body("", hasSize(3))
-                .statusCode(is(200));
-
-        Assert.assertEquals(3, userRepository.count());
-    }
-
-
-    @Test
-    public void getUserWithValidId() throws Exception {
-
-        given()
-                .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
-                .when()
-                .port(this.port)
-                .get("/user/{code}")
-                .then().assertThat()
-                .body("email", equalTo("user1@mail.com"))
-                .body("password", equalTo("123456"))
-                .body("userClass", equalTo("NORMAL"))
-                .statusCode(is(200));
+                .statusCode(is(200))
+                .body("find{it.id==" + problem1.getId() + "}.name", equalTo("name1"))
+                .body("find{it.id==" + problem1.getId() + "}.desc", equalTo("desc1"))
+                .body("find{it.id==" + problem1.getId() + "}.tip", equalTo("tip1"))
+                .body("", hasSize(1));
     }
 
     @Test
-    public void getUserWithAdminClass() throws Exception {
+    public void getProblem() throws Exception {
 
-        userRepository.save(user2);
+        problemRepository.save(problem1);
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user2.getId())
+                .pathParam("code", problem1.getId())
                 .when()
                 .port(this.port)
-                .get("/user/{code}")
+                .get("/problem/{code}")
                 .then().assertThat()
-                .body("email", equalTo("user2@mail.com"))
-                .body("password", equalTo("123456"))
-                .body("userClass", equalTo("ADMIN"))
+                .statusCode(is(200))
+                .body("", not(empty()))
+                .body("id", equalTo(problem1.getId().intValue()))
+                .body("name", equalTo("name1"))
+                .body("desc", equalTo("desc1"))
+                .body("tip", equalTo("tip1"))
+                .body("owner.id", equalTo(user1.getId().intValue()));
+    }
+
+    @Test
+    public void createProblem() throws Exception {
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(gson.toJson(problem1))
+                .when()
+                .port(this.port)
+                .post("/problem")
+                .then().assertThat()
+                .statusCode(is(200))
+                .body("", not(empty()))
+                .body("name", equalTo("name1"))
+                .body("desc", equalTo("desc1"))
+                .body("tip", equalTo("tip1"))
+                .body("owner.id", equalTo(user1.getId().intValue()));
+    }
+
+    @Test
+    public void updateProblem() throws Exception {
+
+        problemRepository.save(problem1);
+
+        problem1.setName("name2");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(gson.toJson(problem1))
+                .pathParam("code", problem1.getId())
+                .when()
+                .port(this.port)
+                .put("/problem/{code}")
+                .then().assertThat()
+                .body("", not(empty()))
+                .body("name", equalTo("name2"))
+                .body("desc", equalTo("desc1"))
+                .body("tip", equalTo("tip1"))
                 .statusCode(is(200));
     }
 
     @Test
-    public void getUserWithInvalidId() throws Exception {
+    public void deleteProblem() throws Exception {
+
+        problemRepository.save(problem1);
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", 999)
+                .pathParam("code", problem1.getId())
                 .when()
                 .port(this.port)
-                .get("/user/{code}")
+                .delete("/problem/{code}")
+                .then().assertThat()
+                .statusCode(is(200));
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("code", problem1.getId())
+                .when()
+                .port(this.port)
+                .delete("/problem/{code}")
                 .then().assertThat()
                 .statusCode(is(404));
     }
 
     @Test
-    public void createUser() throws Exception {
+    public void deleteInexistentProblem() throws Exception {
 
         given()
                 .contentType(ContentType.JSON)
-                .body(gson.toJson(user1))
+                .pathParam("code", 1)
                 .when()
                 .port(this.port)
-                .post("/user")
-                .then().assertThat()
-                .body("email", equalTo("user1@mail.com"))
-                .body("password", equalTo("123456"))
-                .body("userClass", equalTo("NORMAL"))
-                .statusCode(is(200));
-    }
-
-    @Test
-    public void updateUser() throws Exception {
-
-        user1.setEmail("newUser@mail.com");
-
-        given()
-                .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
-                .body(gson.toJson(user1))
-                .when()
-                .port(this.port)
-                .put("/user/{code}")
-                .then().assertThat()
-                .body("email", equalTo("newUser@mail.com"))
-                .body("password", equalTo("123456"))
-                .body("userClass", equalTo("NORMAL"))
-                .statusCode(is(200));
-    }
-
-    @Test
-    public void deleteInexistentUser() throws Exception {
-
-        given()
-                .contentType(ContentType.JSON)
-                .pathParam("code", 999)
-                .when()
-                .port(this.port)
-                .delete("/user/{code}")
-                .then().assertThat()
-                .statusCode(is(404));
-
-    }
-
-    @Test
-    public void deleteUser() throws Exception {
-
-        given()
-                .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
-                .when()
-                .port(this.port)
-                .delete("/user/{code}")
-                .then().assertThat()
-                .statusCode(is(200));
-
-        given()
-                .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
-                .when()
-                .port(this.port)
-                .delete("/user/{code}")
+                .delete("/problem/{code}")
                 .then().assertThat()
                 .statusCode(is(404));
     }

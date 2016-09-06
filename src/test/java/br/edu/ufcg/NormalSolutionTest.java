@@ -26,12 +26,12 @@ import static org.hamcrest.core.IsEqual.equalTo;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AdminSolutionTestSuite {
+public class NormalSolutionTest {
 
     @Value("${local.server.port}")
     private int port;
     private Gson gson;
-    private User user1, user2, admin;
+    private User user1, user2, normal;
     private Problem problem1, problem2;
     private Solution solution1, solution2;
     private ProblemRepository problemRepository;
@@ -57,14 +57,14 @@ public class AdminSolutionTestSuite {
     public void setUp() throws Exception {
         gson = new Gson();
 
-        admin = new User();
-        admin.setEmail("admin@mail.com");
-        admin.setPassword("123456");
-        admin.setUserClass(User.Class.ADMIN);
+        normal = new User();
+        normal.setEmail("admin@mail.com");
+        normal.setPassword("123456");
+        normal.setUserClass(User.Class.NORMAL);
 
-        userRepository.save(admin);
+        userRepository.save(normal);
 
-        RestAssured.authentication = basic(admin.getEmail(), admin.getPassword());
+        RestAssured.authentication = basic(normal.getEmail(), normal.getPassword());
 
         user1 = new User();
         user1.setEmail("user1@mail.com");

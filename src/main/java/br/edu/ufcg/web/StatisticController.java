@@ -1,6 +1,8 @@
 package br.edu.ufcg.web;
 
 import br.edu.ufcg.domain.Statistic;
+import br.edu.ufcg.service.StatisticService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,15 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value="/statistic", produces="application/json")
 public class StatisticController {
 
+    @Autowired
+    StatisticService statisticService;
+
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity<Statistic> getStatistic(){
-        Statistic statistic = new Statistic(99, 25);
-        return new ResponseEntity<>(statistic, HttpStatus.OK);
-    }
-
-    @RequestMapping(method= RequestMethod.PUT)
-    @ResponseBody
-    public ResponseEntity<Statistic> updateStatistic(@RequestBody Statistic statistic){
+        Statistic statistic = statisticService.getStatistic();
         return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
 }
