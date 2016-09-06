@@ -14,7 +14,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,15 +23,15 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-@SpringApplicationConfiguration(classes=Application.class)
+@SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SolutionTestSuite {
+public class AdminSolutionTestSuite {
 
     @Value("${local.server.port}")
     private int port;
     private Gson gson;
-    private User user1, user2;
+    private User user1, user2, admin;
     private Problem problem1, problem2;
     private Solution solution1, solution2;
     private ProblemRepository problemRepository;
@@ -58,7 +57,7 @@ public class SolutionTestSuite {
     public void setUp() throws Exception {
         gson = new Gson();
 
-        User admin = new User();
+        admin = new User();
         admin.setEmail("admin@mail.com");
         admin.setPassword("123456");
         admin.setUserClass(User.Class.ADMIN);
@@ -97,8 +96,8 @@ public class SolutionTestSuite {
 
         Set<Response> responses = new HashSet<>();
 
-        for(int i = 1; i <= 5; i++){
-            responses.add(new Response("input"+i, "output"+i));
+        for (int i = 1; i <= 5; i++) {
+            responses.add(new Response("input" + i, "output" + i));
         }
 
         solution1 = new Solution();
@@ -127,12 +126,12 @@ public class SolutionTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .body(gson.toJson(solution1))
-        .when()
+                .when()
                 .port(this.port)
                 .post("/solution")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(201))
-                .body("body" ,equalTo("solution1"));
+                .body("body", equalTo("solution1"));
 
     }
 
@@ -144,12 +143,12 @@ public class SolutionTestSuite {
 
         given()
                 .contentType(ContentType.JSON)
-        .when()
+                .when()
                 .port(this.port)
                 .get("/solution")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200))
-                .body("body" , hasSize(2));
+                .body("body", hasSize(2));
 
     }
 
@@ -162,12 +161,12 @@ public class SolutionTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .queryParam("user", user1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .get("/solution")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200))
-                .body("body" , hasSize(1));
+                .body("body", hasSize(1));
 
     }
 
@@ -185,6 +184,6 @@ public class SolutionTestSuite {
                 .get("/solution")
                 .then().assertThat()
                 .statusCode(is(200))
-                .body("body" , hasSize(1));
+                .body("body", hasSize(1));
     }
 }

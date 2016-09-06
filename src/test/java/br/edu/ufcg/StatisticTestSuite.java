@@ -1,11 +1,9 @@
 package br.edu.ufcg;
 
-import br.edu.ufcg.domain.Statistic;
 import br.edu.ufcg.domain.User;
 import br.edu.ufcg.domain.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,15 +18,15 @@ import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
-@SpringApplicationConfiguration(classes=Application.class)
+@SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class StatisticTestSuite {
 
+    UserRepository userRepository;
     @Value("${local.server.port}")
     private int port;
     private Gson gson;
-    UserRepository userRepository;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -58,10 +56,10 @@ public class StatisticTestSuite {
     public void getStatistic() throws Exception {
         given()
                 .accept("application/json")
-        .when()
+                .when()
                 .port(this.port)
                 .get("/statistic")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200));
     }
 }

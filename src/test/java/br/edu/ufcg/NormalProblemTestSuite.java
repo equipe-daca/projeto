@@ -21,16 +21,16 @@ import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
-@SpringApplicationConfiguration(classes=Application.class)
+@SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ProblemTestSuite {
+public class NormalProblemTestSuite {
     @Value("${local.server.port}")
     private int port;
     private Gson gson;
     private ProblemRepository problemRepository;
     private UserRepository userRepository;
-    private User user1;
+    private User user1, normal;
     private Problem problem1;
 
     @Autowired
@@ -46,14 +46,10 @@ public class ProblemTestSuite {
     @Before
     public void setUp() throws Exception {
 
-        User admin = new User();
-        admin.setEmail("admin@mail.com");
-        admin.setPassword("123456");
-        admin.setUserClass(User.Class.ADMIN);
-
-        userRepository.save(admin);
-
-        RestAssured.authentication = basic(admin.getEmail(), admin.getPassword());
+        normal = new User();
+        normal.setEmail("normal@mail.com");
+        normal.setPassword("123456");
+        normal.setUserClass(User.Class.NORMAL);
 
         gson = new Gson();
 
@@ -62,13 +58,18 @@ public class ProblemTestSuite {
         user1.setPassword("123456");
         user1.setUserClass(User.Class.NORMAL);
 
-        userRepository.save(user1);
-
         problem1 = new Problem();
         problem1.setName("name1");
         problem1.setDesc("desc1");
         problem1.setTip("tip1");
         problem1.setOwner(user1);
+
+        userRepository.save(normal);
+        userRepository.save(user1);
+
+        problemRepository.save(problem1);
+
+        RestAssured.authentication = basic(normal.getEmail(), normal.getPassword());
     }
 
     @After
@@ -80,19 +81,17 @@ public class ProblemTestSuite {
     @Test
     public void getProblems() throws Exception {
 
-        problemRepository.save(problem1);
-
         given()
                 .contentType(ContentType.JSON)
                 .queryParam("user", user1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .get("/problem")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200))
-                .body("find{it.id=="+problem1.getId()+"}.name",equalTo("name1"))
-                .body("find{it.id=="+problem1.getId()+"}.desc",equalTo("desc1"))
-                .body("find{it.id=="+problem1.getId()+"}.tip",equalTo("tip1"))
+                .body("find{it.id==" + problem1.getId() + "}.name", equalTo("name1"))
+                .body("find{it.id==" + problem1.getId() + "}.desc", equalTo("desc1"))
+                .body("find{it.id==" + problem1.getId() + "}.tip", equalTo("tip1"))
                 .body("", hasSize(1));
     }
 
@@ -104,10 +103,10 @@ public class ProblemTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", problem1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .get("/problem/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200))
                 .body("", not(empty()))
                 .body("id", equalTo(problem1.getId().intValue()))
@@ -123,10 +122,10 @@ public class ProblemTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .body(gson.toJson(problem1))
-        .when()
+                .when()
                 .port(this.port)
                 .post("/problem")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200))
                 .body("", not(empty()))
                 .body("name", equalTo("name1"))
@@ -146,10 +145,10 @@ public class ProblemTestSuite {
                 .contentType(ContentType.JSON)
                 .body(gson.toJson(problem1))
                 .pathParam("code", problem1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .put("/problem/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .body("", not(empty()))
                 .body("name", equalTo("name2"))
                 .body("desc", equalTo("desc1"))
@@ -165,10 +164,10 @@ public class ProblemTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", problem1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .delete("/problem/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200));
 
         given()
@@ -187,10 +186,10 @@ public class ProblemTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", 1)
-        .when()
+                .when()
                 .port(this.port)
                 .delete("/problem/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(404));
     }
 }

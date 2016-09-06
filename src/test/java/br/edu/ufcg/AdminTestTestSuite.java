@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static io.restassured.RestAssured.basic;
@@ -22,10 +20,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-@SpringApplicationConfiguration(classes=Application.class)
+@SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class TestTestSuite {
+public class AdminTestTestSuite {
 
     @Value("${local.server.port}")
     private int port;
@@ -35,8 +33,7 @@ public class TestTestSuite {
     private UserRepository userRepository;
     private Test test1, test2;
     private Problem problem1, problem2;
-    private User user1, user2;
-    private Logger logger = Logger.getLogger(TestTestSuite.class);
+    private User user1, admin;
 
     @Autowired
     public void setProductRepository(ProblemRepository problemRepo) {
@@ -56,7 +53,7 @@ public class TestTestSuite {
     @Before
     public void setUp() throws Exception {
 
-        User admin = new User();
+        admin = new User();
         admin.setEmail("admin@mail.com");
         admin.setPassword("123456");
         admin.setUserClass(User.Class.ADMIN);
@@ -78,7 +75,7 @@ public class TestTestSuite {
         problem1.setTip("tip1");
         problem1.setOwner(user1);
 
-        test1 =  new Test();
+        test1 = new Test();
         test1.setName("test1");
         test1.setTip("tip1");
         test1.setInput("input1");
@@ -86,7 +83,7 @@ public class TestTestSuite {
         test1.setPublicTest(true);
         test1.setProblem(problem1);
 
-        test2 =  new Test();
+        test2 = new Test();
         test2.setName("test2");
         test2.setTip("tip2");
         test2.setInput("input2");
@@ -113,22 +110,22 @@ public class TestTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("problemId", problem1.getId().intValue())
-        .when()
+                .when()
                 .port(this.port)
                 .get("/problem/{problemId}/test")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200))
                 .body("", hasSize(2))
-                .body("find{it.id=="+test1.getId()+"}.name",equalTo("test1"))
-                .body("find{it.id=="+test1.getId()+"}.input",equalTo("input1"))
-                .body("find{it.id=="+test1.getId()+"}.output",equalTo("output1"))
-                .body("find{it.id=="+test1.getId()+"}.tip",equalTo("tip1"))
-                .body("find{it.id=="+test1.getId()+"}.publicTest",equalTo(true))
-                .body("find{it.id=="+test2.getId()+"}.name",equalTo("test2"))
-                .body("find{it.id=="+test2.getId()+"}.input",equalTo("input2"))
-                .body("find{it.id=="+test2.getId()+"}.output",equalTo("output2"))
-                .body("find{it.id=="+test2.getId()+"}.tip",equalTo("tip2"))
-                .body("find{it.id=="+test2.getId()+"}.publicTest",equalTo(false));
+                .body("find{it.id==" + test1.getId() + "}.name", equalTo("test1"))
+                .body("find{it.id==" + test1.getId() + "}.input", equalTo("input1"))
+                .body("find{it.id==" + test1.getId() + "}.output", equalTo("output1"))
+                .body("find{it.id==" + test1.getId() + "}.tip", equalTo("tip1"))
+                .body("find{it.id==" + test1.getId() + "}.publicTest", equalTo(true))
+                .body("find{it.id==" + test2.getId() + "}.name", equalTo("test2"))
+                .body("find{it.id==" + test2.getId() + "}.input", equalTo("input2"))
+                .body("find{it.id==" + test2.getId() + "}.output", equalTo("output2"))
+                .body("find{it.id==" + test2.getId() + "}.tip", equalTo("tip2"))
+                .body("find{it.id==" + test2.getId() + "}.publicTest", equalTo(false));
 
     }
 
@@ -144,17 +141,17 @@ public class TestTestSuite {
                 .contentType(ContentType.JSON)
                 .pathParam("problemId", problem1.getId())
                 .pathParam("testId", test1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .get("/problem/{problemId}/test/{testId}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200))
-                .body("id" ,equalTo(test1.getId().intValue()))
-                .body("name" ,equalTo("test1"))
-                .body("tip" ,equalTo("tip1"))
-                .body("input" ,equalTo("input1"))
-                .body("output" ,equalTo("output1"))
-                .body("publicTest" ,equalTo(true));
+                .body("id", equalTo(test1.getId().intValue()))
+                .body("name", equalTo("test1"))
+                .body("tip", equalTo("tip1"))
+                .body("input", equalTo("input1"))
+                .body("output", equalTo("output1"))
+                .body("publicTest", equalTo(true));
     }
 
     @org.junit.Test
@@ -168,10 +165,10 @@ public class TestTestSuite {
                 .contentType(ContentType.JSON)
                 .pathParam("problemId", problem1.getId())
                 .pathParam("testId", 999)
-        .when()
+                .when()
                 .port(this.port)
                 .get("/problem/{problemId}/test/{testId}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(404));
     }
 
@@ -186,10 +183,10 @@ public class TestTestSuite {
                 .contentType(ContentType.JSON)
                 .pathParam("problemId", 999)
                 .pathParam("testId", test1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .get("/problem/{problemId}/test/{testId}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(404));
     }
 
@@ -204,10 +201,10 @@ public class TestTestSuite {
                 .contentType(ContentType.JSON)
                 .pathParam("problemId", problem1.getId())
                 .pathParam("testId", 999)
-        .when()
+                .when()
                 .port(this.port)
                 .delete("/problem/{problemId}/test/{testId}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(404));
     }
 
@@ -266,17 +263,17 @@ public class TestTestSuite {
                 .body(gson.toJson(test1))
                 .pathParam("problemId", problem1.getId())
                 .pathParam("testId", test1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .put("/problem/{problemId}/test/{testId}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200))
                 .body("id", equalTo(test1.getId().intValue()))
-                .body("name" ,equalTo("test2"))
-                .body("tip" ,equalTo("tip2"))
-                .body("input" ,equalTo("input2"))
-                .body("output" ,equalTo("output2"))
-                .body("publicTest" ,equalTo(false));
+                .body("name", equalTo("test2"))
+                .body("tip", equalTo("tip2"))
+                .body("input", equalTo("input2"))
+                .body("output", equalTo("output2"))
+                .body("publicTest", equalTo(false));
     }
 
     @org.junit.Test
@@ -297,7 +294,7 @@ public class TestTestSuite {
                 .body(gson.toJson(test1))
                 .pathParam("problemId", problem1.getId())
                 .pathParam("testId", 999)
-        .when()
+                .when()
                 .port(this.port)
                 .put("/problem/{problemId}/test/{testId}")
                 .then().assertThat()
@@ -314,16 +311,16 @@ public class TestTestSuite {
                 .contentType(ContentType.JSON)
                 .body(gson.toJson(test1))
                 .pathParam("problemId", problem1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .post("/problem/{problemId}/test")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(HttpStatus.SC_CREATED)
-                .body("name" ,equalTo("test1"))
-                .body("tip" ,equalTo("tip1"))
-                .body("input" ,equalTo("input1"))
-                .body("output" ,equalTo("output1"))
-                .body("publicTest" ,equalTo(true));
+                .body("name", equalTo("test1"))
+                .body("tip", equalTo("tip1"))
+                .body("input", equalTo("input1"))
+                .body("output", equalTo("output1"))
+                .body("publicTest", equalTo(true));
     }
 
     @org.junit.Test
@@ -333,10 +330,10 @@ public class TestTestSuite {
                 .contentType(ContentType.JSON)
                 .body(gson.toJson(test1))
                 .pathParam("problemId", 999)
-        .when()
+                .when()
                 .port(this.port)
                 .post("/problem/{problemId}/test")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 }

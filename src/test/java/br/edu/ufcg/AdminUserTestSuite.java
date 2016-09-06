@@ -4,9 +4,9 @@ import br.edu.ufcg.domain.User;
 import br.edu.ufcg.domain.UserRepository;
 import com.google.gson.Gson;
 import io.restassured.RestAssured;
-import io.restassured.authentication.FormAuthConfig;
 import io.restassured.http.ContentType;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,19 +16,20 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.basic;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
-@SpringApplicationConfiguration(classes=Application.class)
+@SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class UserTestSuite {
+public class AdminUserTestSuite {
 
     @Value("${local.server.port}")
     private int port;
     private Gson gson;
     private UserRepository userRepository;
-    private User user1, user2, user3;
+    private User user1, user2, admin;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -37,17 +38,12 @@ public class UserTestSuite {
 
     @Before
     public void setUp() throws Exception {
+        gson = new Gson();
 
-        User admin = new User();
+        admin = new User();
         admin.setEmail("admin@mail.com");
         admin.setPassword("123456");
         admin.setUserClass(User.Class.ADMIN);
-
-        userRepository.save(admin);
-
-        RestAssured.authentication = basic(admin.getEmail(), admin.getPassword());
-
-        gson = new Gson();
 
         user1 = new User();
         user1.setEmail("user1@mail.com");
@@ -61,7 +57,9 @@ public class UserTestSuite {
 
         userRepository.save(user1);
         userRepository.save(user2);
+        userRepository.save(admin);
 
+        RestAssured.authentication = basic(admin.getEmail(), admin.getPassword());
     }
 
     @After
@@ -72,45 +70,31 @@ public class UserTestSuite {
     @Test
     public void getUserListWithElements() throws Exception {
 
+        Assert.assertEquals(3, userRepository.count());
+
         given()
                 .contentType(ContentType.JSON)
-        .when()
+                .when()
                 .port(this.port)
                 .get("/user")
-        .then().assertThat()
+                .then().assertThat()
                 .body("", hasSize(3))
                 .statusCode(is(200));
 
+        Assert.assertEquals(3, userRepository.count());
     }
 
-    @Test
-    public void getUserListWithOneElement() throws Exception {
-
-        userRepository.delete(user1);
-        userRepository.delete(user2);
-
-        given()
-                .contentType(ContentType.JSON)
-        .when()
-                .port(this.port)
-                .get("/user")
-        .then().assertThat()
-                .body("", hasSize(1))
-                .statusCode(is(200));
-    }
 
     @Test
     public void getUserWithValidId() throws Exception {
 
-        userRepository.save(user1);
-
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", user1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .get("/user/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .body("email", equalTo("user1@mail.com"))
                 .body("password", equalTo("123456"))
                 .body("userClass", equalTo("NORMAL"))
@@ -119,15 +103,16 @@ public class UserTestSuite {
 
     @Test
     public void getUserWithAdminClass() throws Exception {
+
         userRepository.save(user2);
 
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", user2.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .get("/user/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .body("email", equalTo("user2@mail.com"))
                 .body("password", equalTo("123456"))
                 .body("userClass", equalTo("ADMIN"))
@@ -140,10 +125,10 @@ public class UserTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", 999)
-        .when()
+                .when()
                 .port(this.port)
                 .get("/user/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(404));
     }
 
@@ -153,10 +138,10 @@ public class UserTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .body(gson.toJson(user1))
-        .when()
+                .when()
                 .port(this.port)
                 .post("/user")
-        .then().assertThat()
+                .then().assertThat()
                 .body("email", equalTo("user1@mail.com"))
                 .body("password", equalTo("123456"))
                 .body("userClass", equalTo("NORMAL"))
@@ -166,18 +151,16 @@ public class UserTestSuite {
     @Test
     public void updateUser() throws Exception {
 
-        userRepository.save(user1);
-
         user1.setEmail("newUser@mail.com");
 
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", user1.getId())
                 .body(gson.toJson(user1))
-        .when()
+                .when()
                 .port(this.port)
                 .put("/user/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .body("email", equalTo("newUser@mail.com"))
                 .body("password", equalTo("123456"))
                 .body("userClass", equalTo("NORMAL"))
@@ -190,10 +173,10 @@ public class UserTestSuite {
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", 999)
-        .when()
+                .when()
                 .port(this.port)
                 .delete("/user/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(404));
 
     }
@@ -201,24 +184,22 @@ public class UserTestSuite {
     @Test
     public void deleteUser() throws Exception {
 
-        userRepository.save(user1);
-
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", user1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .delete("/user/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(200));
 
         given()
                 .contentType(ContentType.JSON)
                 .pathParam("code", user1.getId())
-        .when()
+                .when()
                 .port(this.port)
                 .delete("/user/{code}")
-        .then().assertThat()
+                .then().assertThat()
                 .statusCode(is(404));
     }
 }
