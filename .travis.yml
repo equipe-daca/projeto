@@ -7,9 +7,3 @@ deploy:
   api_key:
     secure: 7d718ba7-0a20-4a28-907a-a2b6bfe9a8a2
   app: projeto-daca
-
-  # blocklist
-  branches:
-    except:
-    - dev-diego
-    - dev-gervasio
