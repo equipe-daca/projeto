@@ -1,4 +1,4 @@
-package br.edu.ufcg.web;
+package br.edu.ufcg.web.v2;
 
 import br.edu.ufcg.domain.Problem;
 import br.edu.ufcg.service.ProblemService;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping(value="/problem", produces="application/json")
+@RestController("problemControllerV2")
+@RequestMapping(value="/v2/problem", produces="application/json")
 public class ProblemController {
 
     @Autowired

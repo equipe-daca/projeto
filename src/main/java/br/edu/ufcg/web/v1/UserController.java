@@ -1,4 +1,4 @@
-package br.edu.ufcg.web;
+package br.edu.ufcg.web.v1;
 
 import br.edu.ufcg.domain.User;
 import br.edu.ufcg.service.UserService;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping(value="/user", produces="application/json")
+@RestController("userControllerV1")
+@RequestMapping(value="/v1/user", produces="application/json")
 public class UserController {
 
     @Autowired

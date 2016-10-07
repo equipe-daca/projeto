@@ -1,4 +1,4 @@
-package br.edu.ufcg.web;
+package br.edu.ufcg.web.v1;
 
 import br.edu.ufcg.domain.Statistic;
 import br.edu.ufcg.service.StatisticService;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping(value="/statistic", produces="application/json")
+@RestController("statisticControllerV1")
+@RequestMapping(value="/v1/statistic", produces="application/json")
 public class StatisticController {
 
     @Autowired

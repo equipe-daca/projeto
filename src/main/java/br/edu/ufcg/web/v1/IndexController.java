@@ -1,0 +1,15 @@
+package br.edu.ufcg.web.v1;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController("indexControlerV1")
+@RequestMapping(value="/v1/")
+public class IndexController {
+
+    @RequestMapping(value="/", method=RequestMethod.GET, produces="text/plain")
+    public String getIndex(){
+        return "Servidor On";
+    }
+}

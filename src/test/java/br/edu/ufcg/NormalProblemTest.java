@@ -33,6 +33,8 @@ public class NormalProblemTest {
     private User user1, normal;
     private Problem problem1;
 
+    public static final String VERSION = "/v1";
+
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -86,7 +88,7 @@ public class NormalProblemTest {
                 .queryParam("user", user1.getId())
                 .when()
                 .port(this.port)
-                .get("/problem")
+                .get(VERSION+"/problem")
                 .then().assertThat()
                 .statusCode(is(200))
                 .body("find{it.id==" + problem1.getId() + "}.name", equalTo("name1"))
@@ -105,7 +107,7 @@ public class NormalProblemTest {
                 .pathParam("code", problem1.getId())
                 .when()
                 .port(this.port)
-                .get("/problem/{code}")
+                .get(VERSION+"/problem/{code}")
                 .then().assertThat()
                 .statusCode(is(200))
                 .body("", not(empty()))
@@ -124,7 +126,7 @@ public class NormalProblemTest {
                 .body(gson.toJson(problem1))
                 .when()
                 .port(this.port)
-                .post("/problem")
+                .post(VERSION+"/problem")
                 .then().assertThat()
                 .statusCode(is(200))
                 .body("", not(empty()))
@@ -147,7 +149,7 @@ public class NormalProblemTest {
                 .pathParam("code", problem1.getId())
                 .when()
                 .port(this.port)
-                .put("/problem/{code}")
+                .put(VERSION+"/problem/{code}")
                 .then().assertThat()
                 .body("", not(empty()))
                 .body("name", equalTo("name2"))
@@ -166,7 +168,7 @@ public class NormalProblemTest {
                 .pathParam("code", problem1.getId())
                 .when()
                 .port(this.port)
-                .delete("/problem/{code}")
+                .delete(VERSION+"/problem/{code}")
                 .then().assertThat()
                 .statusCode(is(200));
 
@@ -175,7 +177,7 @@ public class NormalProblemTest {
                 .pathParam("code", problem1.getId())
                 .when()
                 .port(this.port)
-                .delete("/problem/{code}")
+                .delete(VERSION+"/problem/{code}")
                 .then().assertThat()
                 .statusCode(is(404));
     }
@@ -188,7 +190,7 @@ public class NormalProblemTest {
                 .pathParam("code", 1)
                 .when()
                 .port(this.port)
-                .delete("/problem/{code}")
+                .delete(VERSION+"/problem/{code}")
                 .then().assertThat()
                 .statusCode(is(404));
     }

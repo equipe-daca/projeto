@@ -1,4 +1,4 @@
-package br.edu.ufcg.web;
+package br.edu.ufcg.web.v2;
 
 import br.edu.ufcg.domain.Solution;
 import br.edu.ufcg.service.SolutionService;
