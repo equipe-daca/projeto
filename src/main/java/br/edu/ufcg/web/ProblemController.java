@@ -1,31 +1,29 @@
-package br.edu.ufcg.web.v2;
+package br.edu.ufcg.web;
 
 import br.edu.ufcg.domain.Problem;
-import br.edu.ufcg.service.ProblemService;
+import br.edu.ufcg.domain.ProblemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController("problemControllerV2")
-@RequestMapping(value="/v2/problem", produces="application/json")
+@RestController
+@RequestMapping(value="/v1/problem", produces="application/json")
 public class ProblemController {
 
     @Autowired
-    ProblemService problemService;
+    ProblemRepository problemRepository;
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity< List<Problem>> getProblems(
+    public ResponseEntity<Iterable<Problem>> getProblems(
             @RequestParam(value = "user", required = false) Long user){
 
-        List<Problem> problems;
+        Iterable<Problem> problems;
 
         if(user == null){
-            problems = problemService.findAll();
+            problems = problemRepository.findAll();
         }else{
-            problems = problemService.findByOwnerId(user);
+            problems = problemRepository.findByOwnerUserId(user);
         }
 
         return new ResponseEntity<>(problems, HttpStatus.OK);
@@ -34,29 +32,29 @@ public class ProblemController {
     @RequestMapping(value="/{problemCode}", method=RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Problem> getProblem(@PathVariable Long problemCode){
-        Problem  problem = problemService.getProblem(problemCode);
+        Problem  problem = problemRepository.findOne(problemCode);
         return new ResponseEntity<>(problem, HttpStatus.OK);
     }
 
     @RequestMapping(method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Problem> createProblem(@RequestBody Problem problem){
-        Problem p = problemService.createProblem(problem);
+        Problem p = problemRepository.save(problem);
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{problemCode}", method=RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<Problem> updateProblem(@PathVariable Long problemCode, @RequestBody Problem problem){
-        Problem p = problemService.updateProblem(problemCode, problem);
+        Problem p = problemRepository.save(problem);
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{problemCode}", method=RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<Problem> deleteProblem(@PathVariable Long problemCode){
-        if(problemService.exists(problemCode)){
-            problemService.delete(problemCode);
+        if(problemRepository.exists(problemCode)){
+            problemRepository.delete(problemCode);
             return new ResponseEntity<>(HttpStatus.OK);
 
         }

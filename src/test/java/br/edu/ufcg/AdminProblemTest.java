@@ -115,7 +115,7 @@ public class AdminProblemTest {
                 .body("name", equalTo("name1"))
                 .body("desc", equalTo("desc1"))
                 .body("tip", equalTo("tip1"))
-                .body("owner.id", equalTo(user1.getId().intValue()));
+                .body("owner.id", equalTo(user1.getUserId().intValue()));
     }
 
     @Test
@@ -133,7 +133,7 @@ public class AdminProblemTest {
                 .body("name", equalTo("name1"))
                 .body("desc", equalTo("desc1"))
                 .body("tip", equalTo("tip1"))
-                .body("owner.id", equalTo(user1.getId().intValue()));
+                .body("owner.id", equalTo(user1.getUserId().intValue()));
     }
 
     @Test
