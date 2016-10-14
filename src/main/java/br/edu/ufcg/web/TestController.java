@@ -4,14 +4,17 @@ import br.edu.ufcg.domain.ProblemRepository;
 import br.edu.ufcg.domain.Test;
 import br.edu.ufcg.domain.TestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(value = "/v1/problem/{problemCode}/test", produces="application/json")
+@RequestMapping(value = "/problem/{problemCode}/test", produces="application/json")
 public class TestController {
 
     @Autowired
@@ -21,16 +24,21 @@ public class TestController {
     ProblemRepository problemRepository;
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity< List<Test>> getTests(@PathVariable Long problemCode){
-        List<Test> tests = testRepository.findByProblemId(problemCode);
+    public ResponseEntity<Page<Test>> getTests(@PathVariable Long problemCode, Pageable pageable){
+        Page<Test> tests = testRepository.findByProblemProblemId(problemCode, pageable);
+
+        for (Test t : tests){
+            updateTestResourcesWithLinks(t, pageable);
+        }
         return new ResponseEntity<>(tests, HttpStatus.OK);
     }
 
     @RequestMapping(value="/{testCode}", method=RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Test> getTest(@PathVariable Long problemCode, @PathVariable Long testCode) {
-        Test test = testRepository.findOneByProblemIdAndId(problemCode, testCode);
+        Test test = testRepository.findOneByProblemProblemIdAndTestId(problemCode, testCode);
         if(test != null){
+            updateTestResourcesWithLinks(test, null);
             return new ResponseEntity<>(test, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -67,5 +75,10 @@ public class TestController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    private void updateTestResourcesWithLinks(Test test, Pageable pageable){
+        test.add(linkTo(methodOn(TestController.class).getTests(test.getProblem().getProblemId(), pageable)).slash(test.getTestId()).withSelfRel());
+        test.add(linkTo(methodOn(ProblemController.class).getProblem(test.getProblem().getProblemId())).withRel("problem"));
     }
 }

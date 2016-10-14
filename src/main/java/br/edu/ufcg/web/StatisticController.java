@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value="/v1/statistic", produces="application/json")
+@RequestMapping(value="/statistic", produces="application/json")
 public class StatisticController {
 
     @Autowired
@@ -22,6 +22,12 @@ public class StatisticController {
 
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity<Statistic> getStatistic(){
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        Statistic statistic = new Statistic();
+
+        statistic.setProblems(problemRepository.count());
+        statistic.setSubmitters(userRepository.count());
+
+        return new ResponseEntity<>(statistic, HttpStatus.OK);
     }
 }

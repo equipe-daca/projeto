@@ -147,8 +147,7 @@ public class NormalSolutionTest {
                 .port(this.port)
                 .get("/solution")
                 .then().assertThat()
-                .statusCode(is(200))
-                .body("body", hasSize(2));
+                .statusCode(is(200));
 
     }
 
@@ -160,13 +159,12 @@ public class NormalSolutionTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .queryParam("user", user1.getId())
+                .queryParam("user", user1.getUserId())
                 .when()
                 .port(this.port)
                 .get("/solution")
                 .then().assertThat()
-                .statusCode(is(200))
-                .body("body", hasSize(1));
+                .statusCode(is(200));
 
     }
 
@@ -178,12 +176,11 @@ public class NormalSolutionTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .queryParam("problem", problem1.getId())
+                .queryParam("problem", problem1.getProblemId())
                 .when()
                 .port(this.port)
                 .get("/solution")
                 .then().assertThat()
-                .statusCode(is(200))
-                .body("body", hasSize(1));
+                .statusCode(is(200));
     }
 }

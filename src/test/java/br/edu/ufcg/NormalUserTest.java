@@ -86,7 +86,7 @@ public class NormalUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
+                .pathParam("code", user1.getUserId())
         .when()
                 .port(this.port)
                 .get("/user/{code}")
@@ -123,7 +123,7 @@ public class NormalUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
+                .pathParam("code", user1.getUserId())
                 .body(gson.toJson(user1))
                 .when()
                 .port(this.port)
@@ -141,7 +141,7 @@ public class NormalUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
+                .pathParam("code", user1.getUserId())
                 .when()
                 .port(this.port)
                 .delete("/user/{code}")

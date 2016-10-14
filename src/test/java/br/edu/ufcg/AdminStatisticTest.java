@@ -91,7 +91,7 @@ public class AdminStatisticTest {
                 .get("/statistic")
         .then().assertThat()
                 .body("problems", equalTo(1))
-                .body("submitters", equalTo(0))
+                .body("submitters", equalTo(2))
                 .statusCode(is(200));
     }
 }

@@ -14,7 +14,6 @@ public class User extends ResourceSupport implements Serializable{
 
     @Id
     @GeneratedValue
-
     private Long userId;
 
     @Column(nullable = false, unique = true)
@@ -32,8 +31,8 @@ public class User extends ResourceSupport implements Serializable{
         return userId;
     }
 
-    public void setUserId(Long id) {
-        this.userId = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {

@@ -33,8 +33,6 @@ public class NormalProblemTest {
     private User user1, normal;
     private Problem problem1;
 
-    public static final String VERSION = "/v1";
-
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -88,13 +86,10 @@ public class NormalProblemTest {
                 .queryParam("user", user1.getId())
                 .when()
                 .port(this.port)
-                .get(VERSION+"/problem")
+                .get("/problem")
                 .then().assertThat()
                 .statusCode(is(200))
-                .body("find{it.id==" + problem1.getId() + "}.name", equalTo("name1"))
-                .body("find{it.id==" + problem1.getId() + "}.desc", equalTo("desc1"))
-                .body("find{it.id==" + problem1.getId() + "}.tip", equalTo("tip1"))
-                .body("", hasSize(1));
+                .body("content", hasSize(1));
     }
 
     @Test
@@ -104,18 +99,17 @@ public class NormalProblemTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", problem1.getId())
+                .pathParam("code", problem1.getProblemId())
                 .when()
                 .port(this.port)
-                .get(VERSION+"/problem/{code}")
+                .get("/problem/{code}")
                 .then().assertThat()
                 .statusCode(is(200))
                 .body("", not(empty()))
-                .body("id", equalTo(problem1.getId().intValue()))
+                .body("problemId", equalTo(problem1.getProblemId().intValue()))
                 .body("name", equalTo("name1"))
                 .body("desc", equalTo("desc1"))
-                .body("tip", equalTo("tip1"))
-                .body("owner.id", equalTo(user1.getUserId().intValue()));
+                .body("tip", equalTo("tip1"));
     }
 
     @Test
@@ -126,14 +120,13 @@ public class NormalProblemTest {
                 .body(gson.toJson(problem1))
                 .when()
                 .port(this.port)
-                .post(VERSION+"/problem")
+                .post("/problem")
                 .then().assertThat()
-                .statusCode(is(200))
+                .statusCode(is(201))
                 .body("", not(empty()))
                 .body("name", equalTo("name1"))
                 .body("desc", equalTo("desc1"))
-                .body("tip", equalTo("tip1"))
-                .body("owner.id", equalTo(user1.getUserId().intValue()));
+                .body("tip", equalTo("tip1"));
     }
 
     @Test
@@ -146,10 +139,10 @@ public class NormalProblemTest {
         given()
                 .contentType(ContentType.JSON)
                 .body(gson.toJson(problem1))
-                .pathParam("code", problem1.getId())
+                .pathParam("code", problem1.getProblemId())
                 .when()
                 .port(this.port)
-                .put(VERSION+"/problem/{code}")
+                .put("/problem/{code}")
                 .then().assertThat()
                 .body("", not(empty()))
                 .body("name", equalTo("name2"))
@@ -165,19 +158,19 @@ public class NormalProblemTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", problem1.getId())
+                .pathParam("code", problem1.getProblemId())
                 .when()
                 .port(this.port)
-                .delete(VERSION+"/problem/{code}")
+                .delete("/problem/{code}")
                 .then().assertThat()
                 .statusCode(is(200));
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", problem1.getId())
+                .pathParam("code", problem1.getProblemId())
                 .when()
                 .port(this.port)
-                .delete(VERSION+"/problem/{code}")
+                .delete("/problem/{code}")
                 .then().assertThat()
                 .statusCode(is(404));
     }
@@ -190,7 +183,7 @@ public class NormalProblemTest {
                 .pathParam("code", 1)
                 .when()
                 .port(this.port)
-                .delete(VERSION+"/problem/{code}")
+                .delete("/problem/{code}")
                 .then().assertThat()
                 .statusCode(is(404));
     }

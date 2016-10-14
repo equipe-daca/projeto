@@ -1,11 +1,14 @@
 package br.edu.ufcg.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.hateoas.ResourceSupport;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class Solution implements Serializable {
+public class Solution extends ResourceSupport implements Serializable {
 
     @Id
     @GeneratedValue
@@ -17,20 +20,22 @@ public class Solution implements Serializable {
     @ElementCollection
     private Set<Response> responses;
 
+    @JsonIgnore
     @ManyToOne
     private User owner;
 
+    @JsonIgnore
     @ManyToOne
     private Problem problem;
 
     public Solution() {
     }
 
-    public Long getId() {
+    public Long getSolutionId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setSolutionId(Long id) {
         this.id = id;
     }
 

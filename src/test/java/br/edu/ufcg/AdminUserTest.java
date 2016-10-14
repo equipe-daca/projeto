@@ -78,7 +78,7 @@ public class AdminUserTest {
                 .port(this.port)
                 .get("/user")
                 .then().assertThat()
-                .body("", hasSize(3))
+                .body("content", hasSize(3))
                 .statusCode(is(200));
 
         Assert.assertEquals(3, userRepository.count());
@@ -90,7 +90,7 @@ public class AdminUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
+                .pathParam("code", user1.getUserId())
                 .when()
                 .port(this.port)
                 .get("/user/{code}")
@@ -108,7 +108,7 @@ public class AdminUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user2.getId())
+                .pathParam("code", user2.getUserId())
                 .when()
                 .port(this.port)
                 .get("/user/{code}")
@@ -145,7 +145,7 @@ public class AdminUserTest {
                 .body("email", equalTo("user1@mail.com"))
                 .body("password", equalTo("123456"))
                 .body("userClass", equalTo("NORMAL"))
-                .statusCode(is(200));
+                .statusCode(is(201));
     }
 
     @Test
@@ -155,7 +155,7 @@ public class AdminUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
+                .pathParam("code", user1.getUserId())
                 .body(gson.toJson(user1))
                 .when()
                 .port(this.port)
@@ -186,7 +186,7 @@ public class AdminUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
+                .pathParam("code", user1.getUserId())
                 .when()
                 .port(this.port)
                 .delete("/user/{code}")
@@ -195,7 +195,7 @@ public class AdminUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
+                .pathParam("code", user1.getUserId())
                 .when()
                 .port(this.port)
                 .delete("/user/{code}")

@@ -148,7 +148,7 @@ public class AdminSolutionTest {
                 .get("/solution")
                 .then().assertThat()
                 .statusCode(is(200))
-                .body("body", hasSize(2));
+                .body("content", hasSize(2));
 
     }
 
@@ -165,8 +165,7 @@ public class AdminSolutionTest {
                 .port(this.port)
                 .get("/solution")
                 .then().assertThat()
-                .statusCode(is(200))
-                .body("body", hasSize(1));
+                .statusCode(is(200));
 
     }
 
@@ -183,7 +182,6 @@ public class AdminSolutionTest {
                 .port(this.port)
                 .get("/solution")
                 .then().assertThat()
-                .statusCode(is(200))
-                .body("body", hasSize(1));
+                .statusCode(is(200));
     }
 }
