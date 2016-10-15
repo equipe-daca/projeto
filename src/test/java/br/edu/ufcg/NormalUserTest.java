@@ -86,11 +86,11 @@ public class NormalUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
-                .when()
+                .pathParam("code", user1.getUserId())
+        .when()
                 .port(this.port)
                 .get("/user/{code}")
-                .then().assertThat()
+        .then().assertThat()
                 .statusCode(HttpStatus.SC_FORBIDDEN);
     }
 
@@ -109,7 +109,7 @@ public class NormalUserTest {
                 .body("email", equalTo("user1@mail.com"))
                 .body("password", equalTo("123456"))
                 .body("userClass", equalTo("NORMAL"))
-                .statusCode(is(200));
+                .statusCode(is(201));
     }
 
     @Test
@@ -123,7 +123,7 @@ public class NormalUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
+                .pathParam("code", user1.getUserId())
                 .body(gson.toJson(user1))
                 .when()
                 .port(this.port)
@@ -141,7 +141,7 @@ public class NormalUserTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .pathParam("code", user1.getId())
+                .pathParam("code", user1.getUserId())
                 .when()
                 .port(this.port)
                 .delete("/user/{code}")

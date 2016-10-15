@@ -1,10 +1,12 @@
 package br.edu.ufcg.domain;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.List;
-
-public interface UserRepository extends CrudRepository<User, Long> {
-    List<User> findAll();
+public interface UserRepository extends PagingAndSortingRepository<User, Long>{
     User findByEmail(String email);
+    Iterable<User> findAll(Sort sort);
+    Page<User> findAll(Pageable pageable);
 }

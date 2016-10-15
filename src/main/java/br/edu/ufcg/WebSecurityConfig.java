@@ -33,9 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                  .antMatchers(HttpMethod.PUT, "/user/*").hasAnyAuthority("ROLE_ADMIN", "ROLE_NORMAL")
                  .antMatchers(HttpMethod.DELETE, "/user/*").hasAuthority("ROLE_ADMIN")
                  /*PROBLEM*/
-                 .antMatchers(HttpMethod.POST, "/problem").hasAnyAuthority("ROLE_ADMIN", "ROLE_NORMAL")
-                 .antMatchers(HttpMethod.PUT, "/problem/*").hasAnyAuthority("ROLE_ADMIN", "ROLE_NORMAL")
-                 .antMatchers(HttpMethod.DELETE, "/problem/*").hasAnyAuthority("ROLE_ADMIN", "ROLE_NORMAL")
+                 .antMatchers(HttpMethod.POST, "/v1/problem").hasAnyAuthority("ROLE_ADMIN", "ROLE_NORMAL")
+                 .antMatchers(HttpMethod.PUT, "/v1/problem/*").hasAnyAuthority("ROLE_ADMIN", "ROLE_NORMAL")
+                 .antMatchers(HttpMethod.DELETE, "/v1/problem/*").hasAnyAuthority("ROLE_ADMIN", "ROLE_NORMAL")
                  /*TEST*/
                  .antMatchers(HttpMethod.POST, "/problem/*/teste").hasAnyAuthority("ROLE_ADMIN", "ROLE_NORMAL")
                  .antMatchers(HttpMethod.PUT, "/problem/*/teste/*").hasAnyAuthority("ROLE_ADMIN", "ROLE_NORMAL")
@@ -52,8 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        /*auth.inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER");*/
+		auth.inMemoryAuthentication()
+				.withUser("admin").password("admin").roles("ADMIN");
+        auth.inMemoryAuthentication()
+                .withUser("user").password("user").roles("USER");
         auth.userDetailsService(userDetailsService());
 	}
 

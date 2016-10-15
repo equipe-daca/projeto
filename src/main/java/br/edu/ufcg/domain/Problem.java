@@ -1,15 +1,18 @@
 package br.edu.ufcg.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.hateoas.ResourceSupport;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class Problem implements Serializable {
+public class Problem extends ResourceSupport implements Serializable {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long problemId;
 
     @Column(nullable = false)
     private String name;
@@ -20,22 +23,23 @@ public class Problem implements Serializable {
     @Column
     private String tip;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "problem", fetch=FetchType.EAGER, cascade = CascadeType.ALL) //, orphanRemoval = true
     private Set<Test> tests;
 
+    @JsonIgnore
     @ManyToOne
     private User owner;
-
 
     public Problem() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getProblemId() {
+        return problemId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setProblemId(Long problemId) {
+        this.problemId = problemId;
     }
 
     public String getName() {
@@ -86,13 +90,4 @@ public class Problem implements Serializable {
         this.setTests(p.getTests());
     }
 
-    /*@PrePersist
-    void onPrePersist() {
-        created = LocalDate.now();
-    }*/
-
-
-    class ProblemDTO{
-
-    }
 }

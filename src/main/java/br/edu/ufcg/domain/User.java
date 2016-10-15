@@ -1,10 +1,12 @@
 package br.edu.ufcg.domain;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class User implements Serializable{
+public class User extends ResourceSupport implements Serializable{
 
     public enum Class {
         NORMAL, ADMIN
@@ -12,7 +14,7 @@ public class User implements Serializable{
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -25,12 +27,12 @@ public class User implements Serializable{
 
     public User() {}
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {
@@ -56,7 +58,6 @@ public class User implements Serializable{
     public void setUserClass(Class userClass) {
         this.userClass = userClass;
     }
-
 
     public void update(User user){
         this.setEmail(user.getEmail());

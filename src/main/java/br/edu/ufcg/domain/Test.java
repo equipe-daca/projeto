@@ -1,16 +1,17 @@
 package br.edu.ufcg.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.hateoas.ResourceSupport;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class Test implements Serializable {
+public class Test extends ResourceSupport implements Serializable {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long testId;
 
     @Column(nullable = false)
     private String name;
@@ -34,12 +35,12 @@ public class Test implements Serializable {
     public Test() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getTestId() {
+        return testId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTestId(Long testId) {
+        this.testId = testId;
     }
 
     public String getName() {
